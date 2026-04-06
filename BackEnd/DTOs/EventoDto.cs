@@ -1,7 +1,7 @@
 namespace BackEnd.DTOs;
 
 /// <summary>
-/// DTO de respuesta para listar eventos (vista resumida).
+/// DTO de respuesta para listar eventos.
 /// </summary>
 public class EventoDto
 {
@@ -11,21 +11,31 @@ public class EventoDto
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }
     public string? UrlImagen { get; set; }
-
-    /// <summary>
-    /// Lugar resuelto: si hay un Local vinculado se usa su nombre,
-    /// de lo contrario se usa el campo Lugar de texto libre.
-    /// </summary>
     public string? Lugar { get; set; }
 
-    /// <summary>ID del local vinculado, null si no aplica.</summary>
-    public int? LocalId { get; set; }
+    /// <summary>True si este es el evento destacado del Home.</summary>
+    public bool Destacado { get; set; }
 }
 
 /// <summary>
-/// DTO de respuesta para el detalle de un evento (incluye datos del local si existe).
+/// DTO de detalle de un evento (mismo contenido que EventoDto, sin relación a Local).
 /// </summary>
-public class EventoDetalleDto : EventoDto
+public class EventoDetalleDto : EventoDto { }
+
+/// <summary>
+/// DTO de entrada para crear o actualizar un evento.
+/// </summary>
+public class UpsertEventoDto
 {
-    public LocalDto? Local { get; set; }
+    public string Titulo { get; set; } = string.Empty;
+    public string Descripcion { get; set; } = string.Empty;
+
+    /// <summary>Fecha y hora de inicio en UTC.</summary>
+    public DateTime FechaInicio { get; set; }
+
+    /// <summary>Fecha y hora de fin en UTC.</summary>
+    public DateTime FechaFin { get; set; }
+
+    public string? UrlImagen { get; set; }
+    public string? Lugar { get; set; }
 }

@@ -21,14 +21,11 @@ public class Local
     /// <summary>URL de la imagen/foto representativa del local.</summary>
     public string? UrlFoto { get; set; }
 
-    /// <summary>Categoría del local (ej. "Restaurante", "Tecnología", "Moda").</summary>
-    public string Categoria { get; set; } = string.Empty;
-
     /// <summary>Horario de atención en texto libre (ej. "Lun-Vie 9:00-18:00").</summary>
     public string Horario { get; set; } = string.Empty;
 
     public string? Telefono { get; set; }
 
-    // --- Relación: Un local puede tener muchos eventos ---
-    public ICollection<Evento> Eventos { get; set; } = [];
+    // --- Relación N:M con Categoria ---
+    public ICollection<LocalCategoria> LocalCategorias { get; set; } = [];
 }

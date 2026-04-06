@@ -9,11 +9,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { EventosManager } from '@/components/admin/eventos-manager'
 import { LocalesManager } from '@/components/admin/locales-manager'
 import { HomeConfigManager } from '@/components/admin/home-config-manager'
-import { Calendar, Store, Settings, LayoutDashboard } from 'lucide-react'
+import { SlidesManager } from '@/components/admin/slides-manager'
+import { Calendar, Store, Settings, LayoutDashboard, Images } from 'lucide-react'
 
 export default function AdminPage() {
   const { isAuthenticated, isLoading, usuario } = useAuth()
-  const { eventos, locales } = useData()
+  const { eventos, locales, perfilActivo } = useData()
   const router = useRouter()
 
   useEffect(() => {
@@ -38,18 +39,26 @@ export default function AdminPage() {
   const totalLocales = locales.length
 
   return (
-    <main className="min-h-screen bg-muted/30 py-8">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+    <main className="min-h-screen pb-8">
+      {/* ── Banner de cabecera ───────────────────────────────── */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-800 to-slate-900 pt-28 pb-12">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-16 -left-16 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl" />
+          <div className="absolute -bottom-10 right-20 h-52 w-52 rounded-full bg-white/5 blur-2xl" />
+          <div className="absolute top-10 right-1/3 h-36 w-36 rounded-full bg-teal-400/10 blur-2xl" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="text-indigo-300 text-sm font-medium uppercase tracking-widest mb-2">Panel de Control</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl drop-shadow">
             Panel de Administración
           </h1>
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-2 text-slate-300">
             Bienvenido, {usuario?.nombre}. Gestiona el contenido del centro comercial.
           </p>
         </div>
+      </div>
 
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8">
         {/* Stats Cards */}
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
@@ -94,20 +103,24 @@ export default function AdminPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Estado del Sistema
+                Slides Carrusel
               </CardTitle>
-              <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
+              <Images className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">Activo</div>
-              <p className="text-xs text-muted-foreground">funcionando correctamente</p>
+              <div className="text-2xl font-bold">{perfilActivo?.slides.length ?? 0}</div>
+              <p className="text-xs text-muted-foreground">slides en perfil activo</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Management Tabs */}
-        <Tabs defaultValue="home" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs defaultValue="carrusel" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="carrusel" className="gap-2">
+              <Images className="h-4 w-4" />
+              <span className="hidden sm:inline">Carrusel</span>
+            </TabsTrigger>
             <TabsTrigger value="home" className="gap-2">
               <LayoutDashboard className="h-4 w-4" />
               <span className="hidden sm:inline">Configurar Home</span>
@@ -124,6 +137,20 @@ export default function AdminPage() {
               <span className="sm:hidden">Locales</span>
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="carrusel">
+            <Card>
+              <CardHeader>
+                <CardTitle>Carrusel de Inicio</CardTitle>
+                <CardDescription>
+                  Gestiona los slides del carrusel: imágenes, animaciones, transiciones y tiempos
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SlidesManager />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="home">
             <Card>

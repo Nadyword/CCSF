@@ -1,32 +1,27 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useMemo } from 'react'
 import { useData } from '@/contexts/data-context'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, Clock, MapPin, Sparkles, ArrowRight, Star } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export function FeaturedEvent() {
-  const { eventos, configuracionHome } = useData()
-  const [fechaFormateada, setFechaFormateada] = useState<string>('')
-  
-  // Buscar el evento destacado configurado
-  const eventoDestacado = configuracionHome.mostrarEventoDestacado && configuracionHome.eventoDestacadoId
-    ? eventos.find(e => e.id === configuracionHome.eventoDestacadoId && e.activo)
-    : null
+  const { eventos } = useData()
 
-  // Format date on client side only to avoid hydration mismatch
-  useEffect(() => {
-    if (eventoDestacado) {
-      const formatted = new Date(eventoDestacado.fecha).toLocaleDateString('es-MX', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      })
-      setFechaFormateada(formatted)
-    }
+  // El evento destacado es el que tiene destacado=true en la BD (máximo uno)
+  const eventoDestacado = eventos.find(e => e.destacado) ?? null
+
+  const fechaFormateada = useMemo(() => {
+    if (!eventoDestacado) return ''
+    return new Date(eventoDestacado.fecha).toLocaleDateString('es-MX', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
   }, [eventoDestacado])
 
   // Si no hay evento destacado, mostrar contenido predeterminado
@@ -81,19 +76,35 @@ export function FeaturedEvent() {
         <div className="overflow-hidden rounded-3xl bg-card shadow-2xl shadow-black/10 border border-border/50 hover-lift animate-scale-in" style={{ animationDelay: '0.2s' }}>
           <div className="grid lg:grid-cols-2">
             {/* Imagen del evento */}
-            <div className="relative h-72 lg:h-auto lg:min-h-[450px] bg-gradient-to-br from-[var(--brand-primary)] via-[var(--brand-secondary)] to-[#1e2761] overflow-hidden">
-              {/* Animated shapes */}
-              <div className="absolute inset-0">
-                <div className="absolute right-10 top-10 h-32 w-32 rounded-full bg-[var(--brand-accent)]/20 blur-2xl animate-float" />
-                <div className="absolute left-10 bottom-10 h-40 w-40 rounded-full bg-[var(--brand-gold)]/15 blur-2xl animate-float" style={{ animationDelay: '1s' }} />
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-                <div className="relative">
-                  <Calendar className="mx-auto h-20 w-20 text-white/40" />
-                  <div className="absolute inset-0 animate-pulse-glow rounded-full" />
-                </div>
-                <p className="mt-6 text-xl font-semibold text-white/80 font-serif">Evento Especial</p>
-              </div>
+            <div className="relative h-72 lg:h-auto lg:min-h-[450px] overflow-hidden bg-gradient-to-br from-[var(--brand-primary)] via-[var(--brand-secondary)] to-[#1e2761]">
+              {eventoDestacado.imagen ? (
+                <>
+                  <Image
+                    src={eventoDestacado.imagen}
+                    alt={eventoDestacado.nombre}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority
+                  />
+                  {/* Overlay degradado para que el borde derecho se funda con el contenido */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/20 lg:to-black/10" />
+                </>
+              ) : (
+                <>
+                  <div className="absolute inset-0">
+                    <div className="absolute right-10 top-10 h-32 w-32 rounded-full bg-[var(--brand-accent)]/20 blur-2xl animate-float" />
+                    <div className="absolute left-10 bottom-10 h-40 w-40 rounded-full bg-[var(--brand-gold)]/15 blur-2xl animate-float" style={{ animationDelay: '1s' }} />
+                  </div>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
+                    <div className="relative">
+                      <Calendar className="mx-auto h-20 w-20 text-white/40" />
+                      <div className="absolute inset-0 animate-pulse-glow rounded-full" />
+                    </div>
+                    <p className="mt-6 text-xl font-semibold text-white/80 font-serif">Evento Especial</p>
+                  </div>
+                </>
+              )}
             </div>
             
             {/* Contenido */}

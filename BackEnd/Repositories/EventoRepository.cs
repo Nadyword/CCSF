@@ -1,42 +1,36 @@
 using BackEnd.Data;
 using BackEnd.DTOs;
+using BackEnd.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd.Repositories;
 
-/// <summary>
-/// Implementación del repositorio de Eventos con Entity Framework Core.
-/// </summary>
 public class EventoRepository(AppDbContext db) : IEventoRepository
 {
+    private static EventoDto ToDto(Evento e) => new()
+    {
+        Id          = e.Id,
+        Titulo      = e.Titulo,
+        Descripcion = e.Descripcion,
+        FechaInicio = e.FechaInicio,
+        FechaFin    = e.FechaFin,
+        UrlImagen   = e.UrlImagen,
+        Lugar       = e.Lugar,
+        Destacado   = e.Destacado,
+    };
+
+    public async Task<IEnumerable<EventoDto>> GetAllAsync() =>
+        (await db.Eventos.OrderByDescending(e => e.FechaInicio).ToListAsync()).Select(ToDto);
+
     public async Task<IEnumerable<EventoDto>> GetProximosAsync()
     {
         var hoy = DateTime.UtcNow;
-
-        return await db.Eventos
-            .Where(e => e.FechaFin >= hoy)           // Solo eventos que aún no han terminado
-            .OrderBy(e => e.FechaInicio)             // Los más próximos primero
-            .Select(e => new EventoDto
-            {
-                Id          = e.Id,
-                Titulo      = e.Titulo,
-                Descripcion = e.Descripcion,
-                FechaInicio = e.FechaInicio,
-                FechaFin    = e.FechaFin,
-                UrlImagen   = e.UrlImagen,
-                LocalId     = e.LocalId,
-                // Si tiene local vinculado, usa el nombre del local; si no, el campo Lugar libre
-                Lugar       = e.Local != null ? e.Local.Nombre : e.Lugar,
-            })
-            .ToListAsync();
+        return (await db.Eventos.Where(e => e.FechaFin >= hoy).OrderBy(e => e.FechaInicio).ToListAsync()).Select(ToDto);
     }
 
     public async Task<EventoDetalleDto?> GetByIdAsync(int id)
     {
-        var evento = await db.Eventos
-            .Include(e => e.Local)     // Eager loading del local vinculado
-            .FirstOrDefaultAsync(e => e.Id == id);
-
+        var evento = await db.Eventos.FirstOrDefaultAsync(e => e.Id == id);
         if (evento is null) return null;
 
         return new EventoDetalleDto
@@ -47,22 +41,67 @@ public class EventoRepository(AppDbContext db) : IEventoRepository
             FechaInicio = evento.FechaInicio,
             FechaFin    = evento.FechaFin,
             UrlImagen   = evento.UrlImagen,
-            LocalId     = evento.LocalId,
-            Lugar       = evento.Local?.Nombre ?? evento.Lugar,
-
-            // Incluye los datos completos del local si existe
-            Local = evento.Local is null ? null : new LocalDto
-            {
-                Id          = evento.Local.Id,
-                Nombre      = evento.Local.Nombre,
-                NumeroLocal = evento.Local.NumeroLocal,
-                Nivel       = evento.Local.Nivel,
-                Descripcion = evento.Local.Descripcion,
-                UrlFoto     = evento.Local.UrlFoto,
-                Categoria   = evento.Local.Categoria,
-                Horario     = evento.Local.Horario,
-                Telefono    = evento.Local.Telefono,
-            }
+            Lugar       = evento.Lugar,
+            Destacado   = evento.Destacado,
         };
+    }
+
+    public async Task<EventoDto> CreateAsync(UpsertEventoDto dto)
+    {
+        var evento = new Evento
+        {
+            Titulo      = dto.Titulo.Trim(),
+            Descripcion = dto.Descripcion.Trim(),
+            FechaInicio = dto.FechaInicio,
+            FechaFin    = dto.FechaFin,
+            UrlImagen   = dto.UrlImagen,
+            Lugar       = dto.Lugar?.Trim(),
+        };
+        db.Eventos.Add(evento);
+        await db.SaveChangesAsync();
+        return ToDto(evento);
+    }
+
+    public async Task<EventoDto?> UpdateAsync(int id, UpsertEventoDto dto)
+    {
+        var evento = await db.Eventos.FindAsync(id);
+        if (evento is null) return null;
+
+        evento.Titulo      = dto.Titulo.Trim();
+        evento.Descripcion = dto.Descripcion.Trim();
+        evento.FechaInicio = dto.FechaInicio;
+        evento.FechaFin    = dto.FechaFin;
+        evento.UrlImagen   = dto.UrlImagen;
+        evento.Lugar       = dto.Lugar?.Trim();
+
+        await db.SaveChangesAsync();
+        return ToDto(evento);
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var evento = await db.Eventos.FindAsync(id);
+        if (evento is null) return false;
+        db.Eventos.Remove(evento);
+        await db.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<EventoDto?> ToggleDestacadoAsync(int id)
+    {
+        var evento = await db.Eventos.FindAsync(id);
+        if (evento is null) return null;
+
+        var nuevoValor = !evento.Destacado;
+        if (nuevoValor)
+        {
+            await db.Eventos
+                .Where(e => e.Destacado && e.Id != id)
+                .ExecuteUpdateAsync(s => s.SetProperty(e => e.Destacado, false));
+        }
+
+        evento.Destacado = nuevoValor;
+        await db.SaveChangesAsync();
+        return ToDto(evento);
     }
 }

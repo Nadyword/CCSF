@@ -1,7 +1,7 @@
 namespace BackEnd.Models;
 
 /// <summary>
-/// Representa un evento que puede estar asociado opcionalmente a un Local.
+/// Representa un evento del centro comercial.
 /// </summary>
 public class Evento
 {
@@ -18,13 +18,12 @@ public class Evento
     /// <summary>URL de la imagen promocional del evento.</summary>
     public string? UrlImagen { get; set; }
 
-    /// <summary>
-    /// Texto libre del lugar cuando el evento no está vinculado a un local del directorio
-    /// (ej. "Auditorio principal", "Plaza central").
-    /// </summary>
+    /// <summary>Texto libre del lugar del evento (ej. "Auditorio principal", "Plaza central").</summary>
     public string? Lugar { get; set; }
 
-    // --- Relación opcional con Local (FK nullable = relación 1:N opcional) ---
-    public int? LocalId { get; set; }
-    public Local? Local { get; set; }
+    /// <summary>
+    /// Indica si este evento es el destacado que se muestra en el Home.
+    /// Solo uno puede tener este campo en true a la vez.
+    /// </summary>
+    public bool Destacado { get; set; } = false;
 }

@@ -1,120 +1,78 @@
 'use client'
 
 import { useData } from '@/contexts/data-context'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Sparkles, Eye, EyeOff } from 'lucide-react'
+import { Calendar, Sparkles, Star, Info } from 'lucide-react'
+import Image from 'next/image'
 
 export function HomeConfigManager() {
-  const { 
-    eventos, 
-    configuracionHome, 
-    setEventoDestacado, 
-    toggleMostrarEventoDestacado 
-  } = useData()
+  const { eventos } = useData()
 
-  const eventosActivos = eventos.filter(e => e.activo)
-  const eventoSeleccionado = eventos.find(e => e.id === configuracionHome.eventoDestacadoId)
+  const eventoDestacado = eventos.find(e => e.destacado) ?? null
 
   return (
-    <div className="space-y-8">
-      {/* Toggle para mostrar/ocultar evento destacado */}
-      <div className="flex items-center justify-between rounded-lg border p-4">
-        <div className="flex items-center gap-4">
-          {configuracionHome.mostrarEventoDestacado ? (
-            <Eye className="h-5 w-5 text-[#4051B5]" />
-          ) : (
-            <EyeOff className="h-5 w-5 text-muted-foreground" />
-          )}
-          <div>
-            <Label htmlFor="mostrar-evento" className="text-base font-medium">
-              Mostrar Evento Destacado
-            </Label>
-            <p className="text-sm text-muted-foreground">
-              {configuracionHome.mostrarEventoDestacado 
-                ? 'El evento destacado se muestra en la página principal'
-                : 'Se mostrará contenido predeterminado en la página principal'
-              }
-            </p>
-          </div>
-        </div>
-        <Switch
-          id="mostrar-evento"
-          checked={configuracionHome.mostrarEventoDestacado}
-          onCheckedChange={toggleMostrarEventoDestacado}
-        />
-      </div>
-
-      {/* Selector de evento destacado */}
-      <div className="space-y-4">
-        <Label className="text-base font-medium">Seleccionar Evento Destacado</Label>
-        <Select
-          value={configuracionHome.eventoDestacadoId || 'none'}
-          onValueChange={(value) => setEventoDestacado(value === 'none' ? null : value)}
-          disabled={!configuracionHome.mostrarEventoDestacado}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Selecciona un evento" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">Sin evento destacado</SelectItem>
-            {eventosActivos.map((evento) => (
-              <SelectItem key={evento.id} value={evento.id}>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  {evento.nombre}
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <p className="text-sm text-muted-foreground">
-          Solo se muestran eventos activos en la lista
+    <div className="space-y-6">
+      <div className="flex items-start gap-3 rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
+        <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-500" />
+        <p>
+          Para cambiar el evento destacado en el Home, ve a la pestaña{' '}
+          <strong className="text-foreground">Eventos</strong> y haz clic en la estrella{' '}
+          <Star className="inline h-3.5 w-3.5 text-amber-400 fill-amber-400" /> de la columna{' '}
+          <strong className="text-foreground">Activo en Home</strong>.
+          Solo puede haber un evento destacado a la vez.
         </p>
       </div>
 
-      {/* Vista previa del evento seleccionado */}
-      {configuracionHome.mostrarEventoDestacado && eventoSeleccionado && (
-        <div className="rounded-lg border bg-muted/50 p-6">
-          <div className="mb-4 flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-[#4051B5]" />
-            <h3 className="font-semibold">Vista Previa del Evento Destacado</h3>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Badge className="bg-[#4051B5]">Destacado</Badge>
-              {eventoSeleccionado.activo && (
-                <Badge variant="outline" className="border-green-500 text-green-600">
-                  Activo
+      {eventoDestacado ? (
+        <div className="overflow-hidden rounded-xl border shadow-sm">
+          {/* Imagen del evento */}
+          {eventoDestacado.imagen && (
+            <div className="relative h-48 w-full bg-gradient-to-br from-indigo-600 to-purple-700">
+              <Image
+                src={eventoDestacado.imagen}
+                alt={eventoDestacado.nombre}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 640px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              <div className="absolute bottom-3 left-4">
+                <Badge className="bg-amber-400 text-amber-900 font-semibold">
+                  <Star className="mr-1 h-3 w-3 fill-current" /> Activo en Home
                 </Badge>
-              )}
+              </div>
             </div>
-            
-            <h4 className="text-xl font-bold">{eventoSeleccionado.nombre}</h4>
-            
-            <p className="text-muted-foreground">{eventoSeleccionado.descripcion}</p>
-            
-            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-              <span>Fecha: {new Date(eventoSeleccionado.fecha).toLocaleDateString('es-MX')}</span>
-              <span>Hora: {eventoSeleccionado.hora}</span>
-              <span>Ubicación: {eventoSeleccionado.ubicacion}</span>
+          )}
+
+          <div className="p-5 space-y-3">
+            {!eventoDestacado.imagen && (
+              <Badge className="bg-amber-400 text-amber-900 font-semibold">
+                <Star className="mr-1 h-3 w-3 fill-current" /> Activo en Home
+              </Badge>
+            )}
+
+            <h3 className="text-xl font-bold">{eventoDestacado.nombre}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-2">{eventoDestacado.descripcion}</p>
+
+            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground pt-1">
+              <span className="flex items-center gap-1.5">
+                <Calendar className="h-4 w-4" />
+                {new Date(eventoDestacado.fecha + 'T12:00:00').toLocaleDateString('es-MX', {
+                  weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                })}
+              </span>
+              <span>{eventoDestacado.hora}</span>
+              <span>{eventoDestacado.ubicacion}</span>
             </div>
           </div>
         </div>
-      )}
-
-      {/* Mensaje cuando no hay evento destacado */}
-      {configuracionHome.mostrarEventoDestacado && !eventoSeleccionado && (
-        <div className="rounded-lg border border-dashed border-amber-500 bg-amber-50 p-6 text-center dark:bg-amber-950/20">
-          <Sparkles className="mx-auto h-8 w-8 text-amber-500" />
-          <h3 className="mt-2 font-semibold text-amber-700 dark:text-amber-400">
-            No hay evento seleccionado
-          </h3>
-          <p className="mt-1 text-sm text-amber-600 dark:text-amber-500">
-            Selecciona un evento activo para destacarlo en la página principal
+      ) : (
+        <div className="rounded-xl border border-dashed border-amber-400 bg-amber-50/50 p-8 text-center">
+          <Sparkles className="mx-auto h-10 w-10 text-amber-400" />
+          <h3 className="mt-3 font-semibold text-amber-700">Sin evento destacado</h3>
+          <p className="mt-1 text-sm text-amber-600">
+            Ningún evento está marcado como activo en el Home. El Home mostrará el mensaje de
+            &quot;Próximamente&quot;.
           </p>
         </div>
       )}

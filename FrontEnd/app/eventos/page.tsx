@@ -6,12 +6,14 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Calendar, Clock, MapPin, Sparkles } from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
+import Image from 'next/image'
 import type { Evento } from '@/lib/types'
 
 export default function EventosPage() {
-  const { eventos } = useData()
+  const { eventos, loadingEventos } = useData()
   const [selectedEvento, setSelectedEvento] = useState<Evento | null>(null)
-  
+
   // Solo mostrar eventos activos
   const eventosActivos = eventos.filter(e => e.activo)
   
@@ -34,24 +36,61 @@ export default function EventosPage() {
   }
 
   return (
-    <main className="min-h-screen bg-muted/30 py-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <Badge className="mb-4 bg-[#4051B5]">
+    <main className="min-h-screen pb-12">
+      {/* ── Banner de cabecera ───────────────────────────────── */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-rose-600 via-pink-600 to-indigo-700 pt-28 pb-16">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute -bottom-12 left-10 h-60 w-60 rounded-full bg-rose-300/20 blur-2xl" />
+          <div className="absolute top-6 left-1/3 h-44 w-44 rounded-full bg-pink-300/15 blur-2xl" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <Badge className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">
             <Calendar className="mr-1 h-3 w-3" />
             Calendario
           </Badge>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-5xl drop-shadow">
             Eventos y Actividades
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-rose-100">
             Descubre todos los eventos y actividades especiales que tenemos preparados para ti
           </p>
         </div>
+      </div>
 
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-10">
         {/* Lista de Eventos */}
-        {Object.keys(eventosPorMes).length === 0 ? (
+        {loadingEventos ? (
+          <div className="space-y-12">
+            {Array.from({ length: 2 }).map((_, gi) => (
+              <div key={gi}>
+                <Skeleton className="h-6 w-40 mb-6" />
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="overflow-hidden rounded-lg border bg-card">
+                      <Skeleton className="h-48 w-full rounded-none" />
+                      <div className="p-5 space-y-3">
+                        <Skeleton className="h-5 w-3/4" />
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-2/3" />
+                        <div className="mt-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Skeleton className="h-4 w-4 rounded" />
+                            <Skeleton className="h-3 w-1/3" />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Skeleton className="h-4 w-4 rounded" />
+                            <Skeleton className="h-3 w-1/4" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : Object.keys(eventosPorMes).length === 0 ? (
           <div className="rounded-lg border border-dashed p-12 text-center">
             <Calendar className="mx-auto h-12 w-12 text-muted-foreground/50" />
             <h2 className="mt-4 text-lg font-semibold">No hay eventos próximos</h2>
@@ -73,13 +112,23 @@ export default function EventosPage() {
                       className="group cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg"
                       onClick={() => setSelectedEvento(evento)}
                     >
-                      {/* Placeholder de imagen */}
-                      <div className="relative h-48 bg-gradient-to-br from-[#4051B5] to-[#2d3a8c]">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <Calendar className="h-16 w-16 text-white/30" />
-                        </div>
+                      {/* Imagen del evento */}
+                      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#4051B5] to-[#2d3a8c]">
+                        {evento.imagen ? (
+                          <Image
+                            src={evento.imagen}
+                            alt={evento.nombre}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <Calendar className="h-16 w-16 text-white/30" />
+                          </div>
+                        )}
                         {evento.destacado && (
-                          <Badge className="absolute right-3 top-3 bg-amber-500">
+                          <Badge className="absolute right-3 top-3 bg-amber-500 z-10">
                             <Sparkles className="mr-1 h-3 w-3" />
                             Destacado
                           </Badge>
@@ -124,9 +173,21 @@ export default function EventosPage() {
           
           {selectedEvento && (
             <div className="space-y-6">
-              {/* Imagen placeholder */}
-              <div className="h-48 rounded-lg bg-gradient-to-br from-[#4051B5] to-[#2d3a8c] flex items-center justify-center">
-                <Calendar className="h-16 w-16 text-white/30" />
+              {/* Imagen del evento */}
+              <div className="relative h-52 overflow-hidden rounded-xl bg-gradient-to-br from-[#4051B5] to-[#2d3a8c]">
+                {selectedEvento.imagen ? (
+                  <Image
+                    src={selectedEvento.imagen}
+                    alt={selectedEvento.nombre}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 512px"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Calendar className="h-16 w-16 text-white/30" />
+                  </div>
+                )}
               </div>
               
               <p className="text-muted-foreground">

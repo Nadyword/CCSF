@@ -20,21 +20,21 @@ const dmSerif = DM_Serif_Display({
 
 export const metadata: Metadata = {
   title: 'Centro Comercial Santa Fe',
-  description: 'Tu destino de compras, entretenimiento y gastronomía en Ciudad de México. Descubre más de 100 tiendas, restaurantes y experiencias únicas.',
+  description: 'Tu destino de compras, entretenimiento y gastronomía en Ciudad de México. Descubre más de 170 tiendas, restaurantes y experiencias únicas.',
   keywords: ['centro comercial', 'santa fe', 'cdmx', 'tiendas', 'restaurantes', 'entretenimiento'],
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
+        url: '/Favicon.png',
         media: '(prefers-color-scheme: light)',
       },
       {
-        url: '/icon-dark-32x32.png',
+        url: '/Favicon.png',
         media: '(prefers-color-scheme: dark)',
       },
       {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: '/Favicon.ico',
+        type: 'image/ico',
       },
     ],
     apple: '/apple-icon.png',
@@ -53,6 +53,14 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${montserrat.variable} ${dmSerif.variable}`}>
       <body className="min-h-screen font-sans antialiased bg-background text-foreground">
+        <div className="page-bg" aria-hidden="true">
+          <div className="orb orb-a" />
+          <div className="orb orb-b" />
+          <div className="orb orb-c" />
+          <div className="orb orb-d" />
+          <div className="orb orb-e" />
+          <div className="orb orb-f" />
+        </div>
         <AuthProvider>
           <DataProvider>
             <Navbar />

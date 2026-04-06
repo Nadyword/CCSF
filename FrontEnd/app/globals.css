@@ -14,7 +14,7 @@
   --brand-sky: #0EA5E9;
   --brand-lime: #84CC16;
   
-  --background: #FAFBFF;
+  --background: #EEF0FF;
   --foreground: #0F172A;
   --card: #FFFFFF;
   --card-foreground: #0F172A;
@@ -145,6 +145,94 @@
   }
 }
 
+/* ── Fondo animado — orbes de gradiente ─────────────────────── */
+@keyframes orb-drift-a {
+  0%,  100% { transform: translate(   0px,    0px) scale(1.00); }
+  20%        { transform: translate(  80px,  -60px) scale(1.06); }
+  45%        { transform: translate(  30px,   90px) scale(0.94); }
+  70%        { transform: translate( -70px,   30px) scale(1.04); }
+}
+@keyframes orb-drift-b {
+  0%,  100% { transform: translate(   0px,    0px) scale(1.00); }
+  25%        { transform: translate( -90px,   50px) scale(1.08); }
+  55%        { transform: translate(  60px,  -80px) scale(0.92); }
+  80%        { transform: translate(  20px,   40px) scale(1.05); }
+}
+@keyframes orb-drift-c {
+  0%,  100% { transform: translate(   0px,    0px) scale(1.00); }
+  35%        { transform: translate(  70px,   70px) scale(1.10); }
+  65%        { transform: translate( -50px,  -45px) scale(0.93); }
+}
+@keyframes orb-pulse {
+  0%,  100% { opacity: 1;    transform: scale(1.00); }
+  50%        { opacity: 0.65; transform: scale(1.15); }
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  /* rejilla de puntos muy sutil */
+  background-image: radial-gradient(circle, rgba(55,48,163,0.07) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.page-bg .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+}
+
+/* Índigo grande — esquina superior izquierda */
+.page-bg .orb-a {
+  width: 750px; height: 750px;
+  top: -200px; left: -180px;
+  background: radial-gradient(circle, rgba(55, 48, 163, 0.28) 0%, rgba(99, 88, 223, 0.12) 50%, transparent 70%);
+  animation: orb-drift-a 22s ease-in-out infinite;
+}
+
+/* Rosa/coral — derecha centro */
+.page-bg .orb-b {
+  width: 600px; height: 600px;
+  top: 20%; right: -200px;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.22) 0%, rgba(251, 113, 133, 0.10) 50%, transparent 70%);
+  animation: orb-drift-b 28s ease-in-out infinite;
+}
+
+/* Teal — abajo centro */
+.page-bg .orb-c {
+  width: 520px; height: 520px;
+  bottom: -120px; left: 25%;
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.24) 0%, rgba(45, 212, 191, 0.10) 50%, transparent 70%);
+  animation: orb-drift-c 19s ease-in-out infinite;
+}
+
+/* Dorado — izquierda media */
+.page-bg .orb-d {
+  width: 450px; height: 450px;
+  top: 50%; left: -100px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.20) 0%, rgba(252, 211, 77, 0.08) 50%, transparent 70%);
+  animation: orb-drift-a 32s ease-in-out infinite reverse;
+}
+
+/* Púrpura — centro superior */
+.page-bg .orb-e {
+  width: 400px; height: 400px;
+  top: 5%; left: 40%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, rgba(192, 132, 252, 0.08) 50%, transparent 70%);
+  animation: orb-drift-b 24s ease-in-out infinite reverse;
+}
+
+/* Sky — abajo derecha */
+.page-bg .orb-f {
+  width: 350px; height: 350px;
+  bottom: 10%; right: 5%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, transparent 70%);
+  animation: orb-pulse 12s ease-in-out infinite;
+}
+
 /* Custom Animations */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
@@ -266,7 +354,69 @@
   
   .border-glow {
     border: 2px solid transparent;
-    background: linear-gradient(var(--card), var(--card)) padding-box, 
+    background: linear-gradient(var(--card), var(--card)) padding-box,
                 linear-gradient(135deg, var(--brand-primary), var(--brand-accent), var(--brand-gold)) border-box;
   }
+
+  /* ── Carrusel: animaciones de entrada (10 opciones) ─────────── */
+  .carousel-enter-fade            { animation: carouselFade            var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-slide-derecha   { animation: carouselSlideDerecha    var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-slide-izquierda { animation: carouselSlideIzquierda  var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-slide-arriba    { animation: carouselSlideArriba     var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-slide-abajo     { animation: carouselSlideAbajo      var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-zoom            { animation: carouselZoom            var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-zoom-out        { animation: carouselZoomOut         var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-flip            { animation: carouselFlip            var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-rotate          { animation: carouselRotate          var(--cd, 700ms) var(--ce, ease-in-out) both; }
+  .carousel-enter-bounce          { animation: carouselBounce          var(--cd, 900ms) var(--ce, ease-out)    both; }
+  .carousel-exit                  { animation: carouselExit 600ms ease-in-out both; }
+}
+
+/* ── Carrusel: keyframes ─────────────────────────────────────── */
+@keyframes carouselFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes carouselSlideDerecha {
+  from { opacity: 0; transform: translateX(-90px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes carouselSlideIzquierda {
+  from { opacity: 0; transform: translateX(90px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes carouselSlideArriba {
+  from { opacity: 0; transform: translateY(70px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes carouselSlideAbajo {
+  from { opacity: 0; transform: translateY(-70px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes carouselZoom {
+  from { opacity: 0; transform: scale(1.12); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes carouselZoomOut {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes carouselFlip {
+  from { opacity: 0; transform: perspective(800px) rotateY(-90deg); }
+  to   { opacity: 1; transform: perspective(800px) rotateY(0deg); }
+}
+@keyframes carouselRotate {
+  from { opacity: 0; transform: rotate(-12deg) scale(0.88); }
+  to   { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+@keyframes carouselBounce {
+  0%   { opacity: 0; transform: translateY(-60px); }
+  55%  { opacity: 1; transform: translateY(12px); }
+  75%  { transform: translateY(-6px); }
+  90%  { transform: translateY(3px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes carouselExit {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }

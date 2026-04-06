@@ -7,6 +7,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Store, MapPin, ArrowRight, Sparkles, Star } from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
+import Image from 'next/image'
 import type { Local } from '@/lib/types'
 
 function pickStableSix(list: Local[]) {
@@ -19,7 +21,7 @@ function pickRandomSix(list: Local[]) {
 }
 
 export function RandomStores() {
-  const { locales } = useData()
+  const { locales, loadingLocales } = useData()
 
   // Mismo HTML en SSR y primer paint del cliente; aleatorizar solo tras hidratar
   const [localesAleatorios, setLocalesAleatorios] = useState(() =>
@@ -30,18 +32,11 @@ export function RandomStores() {
     setLocalesAleatorios(pickRandomSix(locales))
   }, [locales])
 
-  const getCategoryStyle = (categoria: string) => {
-    const styles: Record<string, { bg: string; text: string; gradient: string; shadow: string }> = {
-      'Gastronomia': { bg: 'bg-orange-500', text: 'text-orange-600', gradient: 'from-orange-500 to-red-500', shadow: 'shadow-orange-500/30' },
-      'Moda': { bg: 'bg-pink-500', text: 'text-pink-600', gradient: 'from-pink-500 to-rose-500', shadow: 'shadow-pink-500/30' },
-      'Tecnologia': { bg: 'bg-blue-500', text: 'text-blue-600', gradient: 'from-blue-500 to-indigo-500', shadow: 'shadow-blue-500/30' },
-      'Entretenimiento': { bg: 'bg-purple-500', text: 'text-purple-600', gradient: 'from-purple-500 to-violet-500', shadow: 'shadow-purple-500/30' },
-      'Servicios': { bg: 'bg-slate-500', text: 'text-slate-600', gradient: 'from-slate-500 to-gray-600', shadow: 'shadow-slate-500/30' },
-      'Belleza': { bg: 'bg-rose-500', text: 'text-rose-600', gradient: 'from-rose-500 to-pink-500', shadow: 'shadow-rose-500/30' },
-      'Hogar': { bg: 'bg-emerald-500', text: 'text-emerald-600', gradient: 'from-emerald-500 to-teal-500', shadow: 'shadow-emerald-500/30' },
-      'Deportes': { bg: 'bg-teal-500', text: 'text-teal-600', gradient: 'from-teal-500 to-cyan-500', shadow: 'shadow-teal-500/30' },
+  const getCategoryStyle = (color: string | null | undefined) => {
+    if (color) {
+      return { gradient: `from-gray-700 to-gray-900`, shadow: 'shadow-gray-500/30', color }
     }
-    return styles[categoria] || { bg: 'bg-gray-500', text: 'text-gray-600', gradient: 'from-gray-500 to-gray-600', shadow: 'shadow-gray-500/30' }
+    return { gradient: 'from-gray-500 to-gray-600', shadow: 'shadow-gray-500/30', color: '#6b7280' }
   }
 
   return (
@@ -67,43 +62,74 @@ export function RandomStores() {
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {localesAleatorios.map((local, index) => {
-            const style = getCategoryStyle(local.categoria)
+          {loadingLocales ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="overflow-hidden rounded-3xl border-0 bg-card card-shadow">
+                <Skeleton className="h-56 w-full rounded-none" />
+                <div className="p-7 space-y-3">
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-2/3" />
+                  <div className="flex items-center gap-3 mt-6">
+                    <Skeleton className="h-10 w-10 rounded-xl" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : localesAleatorios.map((local, index) => {
+            const firstCat = local.categorias[0]
+            const style = getCategoryStyle(firstCat?.color)
             return (
-              <Card 
-                key={local.id} 
+              <Card
+                key={local.id}
                 className={`group overflow-hidden border-0 bg-card card-shadow hover-lift animate-slide-up rounded-3xl`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {/* Image placeholder with gradient */}
-                <div className={`relative h-56 overflow-hidden bg-gradient-to-br ${style.gradient}`}>
-                  <div className="absolute inset-0 bg-black/10" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className={`flex h-24 w-24 items-center justify-center rounded-3xl bg-white/20 backdrop-blur-sm transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-2xl`}>
-                      <Store className="h-12 w-12 text-white" />
-                    </div>
-                  </div>
-                  <Badge 
-                    className={`absolute right-4 top-4 bg-white/90 ${style.text} border-0 font-bold shadow-lg`}
-                  >
-                    {local.categoria}
-                  </Badge>
-                  {/* Decorative elements */}
+                <div
+                  className="relative h-56 overflow-hidden"
+                  style={{ background: style.color ? `linear-gradient(135deg, ${style.color}cc, ${style.color}88)` : 'linear-gradient(135deg,#6b728099,#6b728066)' }}
+                >
+                  {local.imagen ? (
+                    <>
+                      <Image src={local.imagen} alt={local.nombre} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="400px" />
+                      <div className="absolute inset-0 bg-black/20" />
+                    </>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 bg-black/10" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white/20 backdrop-blur-sm transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-2xl">
+                          <Store className="h-12 w-12 text-white" />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {/* Primera categoría como badge */}
+                  {firstCat && (
+                    <Badge className="absolute right-4 top-4 bg-white/90 border-0 font-bold shadow-lg" style={{ color: style.color ?? '#6b7280' }}>
+                      {firstCat.nombre}
+                    </Badge>
+                  )}
                   <div className="absolute -bottom-8 -right-8 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
                   <div className="absolute -top-8 -left-8 h-24 w-24 rounded-full bg-white/10 blur-xl" />
                 </div>
-                
+
                 <CardContent className="p-7">
                   <h3 className="text-xl font-bold text-foreground transition-colors group-hover:text-[var(--brand-primary)]">
                     {local.nombre}
                   </h3>
-                  
+
                   <p className="mt-3 line-clamp-2 text-sm text-muted-foreground leading-relaxed">
                     {local.descripcion}
                   </p>
-                  
+
                   <div className="mt-6 flex items-center gap-3 text-sm text-muted-foreground">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${style.gradient} ${style.shadow} shadow-lg`}>
+                    <div
+                      className="flex h-10 w-10 items-center justify-center rounded-xl shadow-lg"
+                      style={{ background: style.color ? `linear-gradient(135deg, ${style.color}, ${style.color}99)` : 'linear-gradient(135deg,#6b7280,#6b728099)' }}
+                    >
                       <MapPin className="h-5 w-5 text-white" />
                     </div>
                     <span className="font-medium">{local.nivel} - Local {local.numeroLocal}</span>

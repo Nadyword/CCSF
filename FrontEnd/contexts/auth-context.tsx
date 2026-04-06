@@ -1,8 +1,8 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useSyncExternalStore, type ReactNode } from 'react'
 import type { Usuario } from '@/lib/types'
-import { usuariosData } from '@/lib/data'
+import { loginApi } from '@/lib/api'
 
 interface AuthContextType {
   usuario: Usuario | null
@@ -13,43 +13,76 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const SESSION_KEY = 'cc_session'
+const TOKEN_KEY = 'cc_token'
+
+const sessionListeners = new Set<() => void>()
+let cachedRawSession: string | null | undefined
+let cachedSessionSnapshot: Usuario | null = null
+
+function subscribeToSession(listener: () => void) {
+  sessionListeners.add(listener)
+  return () => sessionListeners.delete(listener)
+}
+
+function notifySessionChange() {
+  sessionListeners.forEach((listener) => listener())
+}
+
+function getSessionSnapshot(): Usuario | null {
+  if (typeof window === 'undefined') return null
+  const rawSession = localStorage.getItem(SESSION_KEY)
+
+  if (rawSession === cachedRawSession) return cachedSessionSnapshot
+
+  cachedRawSession = rawSession
+  if (!rawSession) {
+    cachedSessionSnapshot = null
+    return null
+  }
+
+  try {
+    cachedSessionSnapshot = JSON.parse(rawSession) as Usuario
+    return cachedSessionSnapshot
+  } catch {
+    localStorage.removeItem(SESSION_KEY)
+    cachedRawSession = null
+    cachedSessionSnapshot = null
+    return null
+  }
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [usuario, setUsuario] = useState<Usuario | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    // Verificar si hay una sesión guardada
-    const savedUser = localStorage.getItem('cc_session')
-    if (savedUser) {
-      try {
-        const user = JSON.parse(savedUser)
-        setUsuario(user)
-      } catch {
-        localStorage.removeItem('cc_session')
-      }
-    }
-    setIsLoading(false)
-  }, [])
+  const usuario = useSyncExternalStore(
+    subscribeToSession,
+    getSessionSnapshot,
+    () => null
+  )
+  const isLoading = false
 
   const login = async (username: string, password: string): Promise<boolean> => {
-    // Simular llamada a API - en producción esto sería un fetch a tu API
-    const user = usuariosData.find(
-      u => u.username === username && u.password === password
-    )
-    
-    if (user) {
-      const userWithoutPassword = { ...user, password: '' }
-      setUsuario(userWithoutPassword as Usuario)
-      localStorage.setItem('cc_session', JSON.stringify(userWithoutPassword))
+    try {
+      const data = await loginApi(username, password)
+
+      localStorage.setItem(TOKEN_KEY, data.token)
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        id: data.username,
+        username: data.username,
+        password: '',
+        nombre: data.nombre,
+        rol: data.rol,
+      } satisfies Usuario))
+      notifySessionChange()
       return true
+    } catch {
+      return false
     }
-    return false
   }
 
   const logout = () => {
-    setUsuario(null)
-    localStorage.removeItem('cc_session')
+    localStorage.removeItem(SESSION_KEY)
+    localStorage.removeItem(TOKEN_KEY)
+    notifySessionChange()
   }
 
   return (

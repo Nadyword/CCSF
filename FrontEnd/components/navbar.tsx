@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { LoginModal } from './login-modal'
 import { Button } from '@/components/ui/button'
@@ -28,6 +29,8 @@ import { infoCC } from '@/lib/data'
 
 export function Navbar() {
   const { usuario, isAuthenticated, logout } = useAuth()
+  const pathname = usePathname()
+  const isHome = pathname === '/'
   const [loginOpen, setLoginOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -49,25 +52,25 @@ export function Navbar() {
   return (
     <>
       <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        scrolled 
-          ? 'bg-background/95 backdrop-blur-md shadow-lg shadow-black/5 border-b' 
+        scrolled || !isHome
+          ? 'bg-background/95 backdrop-blur-md shadow-lg shadow-black/5 border-b'
           : 'bg-transparent'
       }`}>
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href="/" className="group flex items-center gap-3">
             <div className="relative">
-              <div className={`absolute inset-0 rounded-full transition-all duration-300 ${scrolled ? 'bg-[var(--brand-primary)]/10' : 'bg-white/20'} blur-lg group-hover:scale-125`} />
+              <div className={`absolute inset-0 rounded-full transition-all duration-300 ${scrolled || !isHome ? 'bg-[var(--brand-primary)]/10' : 'bg-white/20'} blur-lg group-hover:scale-125`} />
               <Image
                 src={infoCC.logo}
                 alt={infoCC.nombre}
                 width={44}
                 height={44}
-                className={`relative h-11 w-11 object-contain transition-all duration-300 ${scrolled ? '' : 'brightness-0 invert'}`}
+                className={`relative h-11 w-11 object-contain transition-all duration-300 ${scrolled || !isHome ? '' : 'brightness-0 invert'}`}
               />
             </div>
             <span className={`hidden font-semibold transition-colors duration-300 sm:block ${
-              scrolled ? 'text-foreground' : 'text-white'
+              scrolled || !isHome ? 'text-foreground' : 'text-white'
             }`}>
               Centro Comercial Santa Fe
             </span>
@@ -80,8 +83,8 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full group ${
-                  scrolled 
-                    ? 'text-muted-foreground hover:text-foreground hover:bg-muted' 
+                  scrolled || !isHome
+                    ? 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     : 'text-white/80 hover:text-white hover:bg-white/10'
                 }`}
               >
@@ -100,8 +103,8 @@ export function Navbar() {
                     variant="outline" 
                     size="sm" 
                     className={`gap-2 transition-all duration-300 ${
-                      scrolled 
-                        ? 'border-border bg-background hover:bg-muted' 
+                      scrolled || !isHome
+                        ? 'border-border bg-background hover:bg-muted'
                         : 'border-white/30 bg-white/10 text-white hover:bg-white/20'
                     }`}
                   >
@@ -141,8 +144,8 @@ export function Navbar() {
                 size="sm"
                 onClick={() => setLoginOpen(true)}
                 className={`gap-2 transition-all duration-300 hover:scale-105 ${
-                  scrolled 
-                    ? 'border-[var(--brand-primary)] text-[var(--brand-primary)] hover:bg-[var(--brand-primary)] hover:text-white' 
+                  scrolled || !isHome
+                    ? 'border-[var(--brand-primary)] text-[var(--brand-primary)] hover:bg-[var(--brand-primary)] hover:text-white'
                     : 'border-white/30 bg-white/10 text-white hover:bg-white/20'
                 }`}
               >
@@ -155,7 +158,7 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className={`md:hidden transition-colors ${scrolled ? '' : 'text-white hover:bg-white/10'}`}
+              className={`md:hidden transition-colors ${scrolled || !isHome ? '' : 'text-white hover:bg-white/10'}`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (

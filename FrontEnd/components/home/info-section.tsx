@@ -5,7 +5,7 @@ import { MapPin, Phone, Clock, Car, Wifi, Shield, Sparkles, CreditCard, Accessib
 
 export function InfoSection() {
   const servicios = [
-    { icon: Car, label: 'Estacionamiento', descripcion: '3,000+ espacios', color: 'from-blue-500 to-indigo-600', shadow: 'shadow-blue-500/40' },
+    { icon: Car, label: 'Estacionamiento', descripcion: '640', color: 'from-blue-500 to-indigo-600', shadow: 'shadow-blue-500/40' },
     { icon: Wifi, label: 'WiFi Gratis', descripcion: 'Todo el centro', color: 'from-emerald-500 to-teal-600', shadow: 'shadow-emerald-500/40' },
     { icon: Shield, label: 'Seguridad 24/7', descripcion: 'Vigilancia total', color: 'from-orange-500 to-red-500', shadow: 'shadow-orange-500/40' },
     { icon: CreditCard, label: 'Pagos Faciles', descripcion: 'Todas las tarjetas', color: 'from-purple-500 to-violet-600', shadow: 'shadow-purple-500/40' },

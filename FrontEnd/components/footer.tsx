@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { infoCC } from '@/lib/data'
-import { MapPin, Phone, Clock, Facebook, Instagram, Twitter, Mail, ArrowUpRight } from 'lucide-react'
+import { MapPin, Phone, Clock, Instagram, Mail, ArrowUpRight, Facebook } from 'lucide-react'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -15,9 +15,8 @@ export function Footer() {
   ]
 
   const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
+    { icon: Instagram, href: 'https://www.instagram.com/ccsantafevzla/', label: 'Instagram' },
+    { icon: Facebook, href: 'https://www.facebook.com/ccsantafevzla', label: 'Facebook' },
   ]
 
   return (
@@ -109,7 +108,7 @@ export function Footer() {
                 <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[var(--brand-gold)]/10 text-[var(--brand-gold)]">
                   <Mail className="h-4 w-4" />
                 </div>
-                <span className="text-sm text-muted-foreground">info@ccsantafe.com</span>
+                <span className="text-sm text-muted-foreground">gerencia_administrativa@ccsantafe.com.ve</span>
               </li>
             </ul>
           </div>
