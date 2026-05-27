@@ -1,22 +1,4 @@
-import type { Usuario, ConfiguracionHome } from './types'
-
-// Usuario de ejemplo para autenticación (en producción esto vendría de una API/BD)
-export const usuariosData: Usuario[] = [
-  {
-    id: '1',
-    username: 'admin',
-    password: 'admin123', // En producción usar hash
-    nombre: 'Administrador',
-    rol: 'admin'
-  },
-  {
-    id: '2',
-    username: 'editor',
-    password: 'editor123',
-    nombre: 'Editor de Contenido',
-    rol: 'editor'
-  }
-]
+import type { ConfiguracionHome } from './types'
 
 // Configuración inicial del Home
 export const configuracionHomeData: ConfiguracionHome = {

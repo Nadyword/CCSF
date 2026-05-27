@@ -126,14 +126,6 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
             )}
           </Button>
           
-          {/* Demo credentials hint */}
-          <div className="rounded-xl bg-muted/50 p-4 border border-border">
-            <p className="text-xs font-medium text-muted-foreground mb-2">Credenciales de prueba:</p>
-            <div className="space-y-1 text-xs text-muted-foreground">
-              <p><span className="font-semibold text-foreground">Usuario:</span> admin</p>
-              <p><span className="font-semibold text-foreground">Contrasena:</span> admin123</p>
-            </div>
-          </div>
         </form>
       </DialogContent>
     </Dialog>

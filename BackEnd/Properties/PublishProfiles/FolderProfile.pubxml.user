@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\samue\Documents\Proyectos\CCSF\BackEnd\bin\Release\net10.0\publish\</_PublishTargetUrl>
+    <History>True|2026-05-27T22:53:55.2019555Z||;True|2026-05-27T18:51:52.7643944-04:00||;True|2026-05-27T16:56:36.7740980-04:00||;True|2026-05-27T16:55:18.8503853-04:00||;</History>
+    <LastFailureDetails />
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=2.25.138.9,5432%3bDatabase=SantaFeDB%3bUser Id=postgres%3bPassword=Sa753951.%3bTrustServerCertificate=True%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="BackEnd.Data.AppDbContext">
+      <Value>Server=2.25.138.9,5432%3bDatabase=SantaFeDB%3bUser Id=postgres%3bPassword=Sa753951.%3bTrustServerCertificate=True%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

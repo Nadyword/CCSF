@@ -17,3 +17,5 @@ node_modules
 .vs/
 BackEnd/obj/
 BackEnd/bin
+BackEnd/Migrations/*
+CLAUDE.md

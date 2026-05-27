@@ -10,10 +10,10 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // ─────────────────────────────────────────────
-// 1. Base de datos — Entity Framework Core + SQL Server
+// 1. Base de datos — Entity Framework Core + PostgreSQL
 // ─────────────────────────────────────────────
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ─────────────────────────────────────────────
 // 2. Repositorios — inyección de dependencias
@@ -109,14 +109,14 @@ using (var scope = app.Services.CreateScope())
     if (!await db.Categorias.AnyAsync())
     {
         db.Categorias.AddRange(
-            new BackEnd.Models.Categoria { Nombre = "Gastronomía",    Color = "#f97316" },
-            new BackEnd.Models.Categoria { Nombre = "Moda",           Color = "#ec4899" },
-            new BackEnd.Models.Categoria { Nombre = "Tecnología",     Color = "#3b82f6" },
-            new BackEnd.Models.Categoria { Nombre = "Entretenimiento",Color = "#a855f7" },
-            new BackEnd.Models.Categoria { Nombre = "Servicios",      Color = "#6b7280" },
-            new BackEnd.Models.Categoria { Nombre = "Belleza",        Color = "#f43f5e" },
-            new BackEnd.Models.Categoria { Nombre = "Hogar",          Color = "#22c55e" },
-            new BackEnd.Models.Categoria { Nombre = "Deportes",       Color = "#10b981" }
+            new BackEnd.Models.Categoria { Nombre = "Gastronomía", Color = "#f97316" },
+            new BackEnd.Models.Categoria { Nombre = "Moda", Color = "#ec4899" },
+            new BackEnd.Models.Categoria { Nombre = "Tecnología", Color = "#3b82f6" },
+            new BackEnd.Models.Categoria { Nombre = "Entretenimiento", Color = "#a855f7" },
+            new BackEnd.Models.Categoria { Nombre = "Servicios", Color = "#6b7280" },
+            new BackEnd.Models.Categoria { Nombre = "Belleza", Color = "#f43f5e" },
+            new BackEnd.Models.Categoria { Nombre = "Hogar", Color = "#22c55e" },
+            new BackEnd.Models.Categoria { Nombre = "Deportes", Color = "#10b981" }
         );
         await db.SaveChangesAsync();
     }

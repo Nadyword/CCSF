@@ -34,7 +34,7 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
         Console.ResetColor();
 
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseNpgsql(connectionString);
 
         return new AppDbContext(optionsBuilder.Options);
     }
