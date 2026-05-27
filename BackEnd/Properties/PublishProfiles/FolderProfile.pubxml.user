@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\samue\Documents\Proyectos\CCSF\BackEnd\bin\Release\net10.0\publish\</_PublishTargetUrl>
-    <History>True|2026-05-27T22:53:55.2019555Z||;True|2026-05-27T18:51:52.7643944-04:00||;True|2026-05-27T16:56:36.7740980-04:00||;True|2026-05-27T16:55:18.8503853-04:00||;</History>
+    <History>True|2026-05-27T22:58:14.7499726Z||;True|2026-05-27T18:53:55.2019555-04:00||;True|2026-05-27T18:51:52.7643944-04:00||;True|2026-05-27T16:56:36.7740980-04:00||;True|2026-05-27T16:55:18.8503853-04:00||;</History>
     <LastFailureDetails />
     <TimeStampOfAssociatedLegacyPublishXmlFile />
   </PropertyGroup>
