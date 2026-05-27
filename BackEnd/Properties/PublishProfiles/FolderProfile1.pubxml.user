@@ -3,7 +3,18 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\samue\Documents\Proyectos\CCSF\Publish</_PublishTargetUrl>
-    <History>True|2026-05-27T22:59:36.9190207Z||;</History>
+    <History>True|2026-05-27T23:03:43.4035701Z||;True|2026-05-27T18:59:36.9190207-04:00||;</History>
     <LastFailureDetails />
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
   </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=localhost%3bDatabase=SantaFeDB%3bUser Id=postgres%3bPassword=Sa753951.%3bTrustServerCertificate=True%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="BackEnd.Data.AppDbContext">
+      <Value>Server=localhost%3bDatabase=SantaFeDB%3bUser Id=postgres%3bPassword=Sa753951.%3bTrustServerCertificate=True%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
 </Project>
