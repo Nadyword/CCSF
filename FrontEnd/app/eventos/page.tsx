@@ -9,6 +9,7 @@ import { Calendar, Clock, MapPin, Sparkles } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import Image from 'next/image'
 import type { Evento } from '@/lib/types'
+import { getStaticUrl } from '@/lib/utils'
 
 export default function EventosPage() {
   const { eventos, loadingEventos } = useData()
@@ -116,7 +117,7 @@ export default function EventosPage() {
                       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#4051B5] to-[#2d3a8c]">
                         {evento.imagen ? (
                           <Image
-                            src={evento.imagen}
+                            src={getStaticUrl(evento.imagen)}
                             alt={evento.nombre}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -177,7 +178,7 @@ export default function EventosPage() {
               <div className="relative h-52 overflow-hidden rounded-xl bg-gradient-to-br from-[#4051B5] to-[#2d3a8c]">
                 {selectedEvento.imagen ? (
                   <Image
-                    src={selectedEvento.imagen}
+                    src={getStaticUrl(selectedEvento.imagen)}
                     alt={selectedEvento.nombre}
                     fill
                     className="object-cover"

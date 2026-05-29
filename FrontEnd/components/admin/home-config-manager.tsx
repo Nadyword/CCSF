@@ -4,6 +4,7 @@ import { useData } from '@/contexts/data-context'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, Sparkles, Star, Info } from 'lucide-react'
 import Image from 'next/image'
+import { getStaticUrl } from '@/lib/utils'
 
 export function HomeConfigManager() {
   const { eventos } = useData()
@@ -29,7 +30,7 @@ export function HomeConfigManager() {
           {eventoDestacado.imagen && (
             <div className="relative h-48 w-full bg-gradient-to-br from-indigo-600 to-purple-700">
               <Image
-                src={eventoDestacado.imagen}
+                src={getStaticUrl(eventoDestacado.imagen)}
                 alt={eventoDestacado.nombre}
                 fill
                 className="object-cover"

@@ -16,6 +16,7 @@ import { Plus, Pencil, Trash2, Store, Search, Tag, Upload, ImageIcon, X, Loader2
 import Image from 'next/image'
 import type { Local, Categoria } from '@/lib/types'
 import type { UpsertLocalPayload } from '@/lib/api'
+import { getStaticUrl } from '@/lib/utils'
 
 // ─── Helper de estilo de badge ───────────────────────────────────────────────
 
@@ -161,7 +162,7 @@ function ImagePickerLocal({ value, onChange }: { value: string | null; onChange:
                   className={`group relative aspect-square cursor-pointer overflow-hidden rounded-md border-2 transition-all ${value === img.url ? 'border-indigo-500' : 'border-transparent hover:border-indigo-300'}`}
                   onClick={() => onChange(img.url)}
                 >
-                  <Image src={img.url} alt={img.name} fill className="object-cover" sizes="120px" />
+                  <Image src={getStaticUrl(img.url)} alt={img.name} fill className="object-cover" sizes="120px" />
                   <button
                     type="button"
                     onClick={e => { e.stopPropagation(); handleDeleteFromGaleria(img) }}

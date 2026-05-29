@@ -9,6 +9,7 @@ import { infoCC } from '@/lib/data'
 import { useData } from '@/contexts/data-context'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { SlideCarrusel } from '@/lib/types'
+import { getStaticUrl } from '@/lib/utils'
 
 // ─── Mapeo de opciones a valores CSS ─────────────────────────────────────────
 
@@ -81,7 +82,7 @@ export function HeroSection() {
       {/* ── FONDO: slides del carrusel ─────────────────────────────────────── */}
       {!loadingPerfilActivo && prevSlide && (
         <div key={`prev-${prevIdx}`} className="carousel-exit absolute inset-0 z-0">
-          <Image src={prevSlide.urlImagen} alt="" fill className="object-cover" priority sizes="100vw" />
+          <Image src={getStaticUrl(prevSlide.urlImagen)} alt="" fill className="object-cover" priority sizes="100vw" />
         </div>
       )}
 
@@ -94,7 +95,7 @@ export function HeroSection() {
             '--cd': '700ms',
           } as React.CSSProperties}
         >
-          <Image src={activeSlide.urlImagen} alt="" fill className="object-cover" priority sizes="100vw" />
+          <Image src={getStaticUrl(activeSlide.urlImagen)} alt="" fill className="object-cover" priority sizes="100vw" />
         </div>
       )}
 

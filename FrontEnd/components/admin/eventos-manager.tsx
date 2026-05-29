@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import type { Evento } from '@/lib/types'
+import { getStaticUrl } from '@/lib/utils'
 
 // ─── Utilidades de fecha/hora ─────────────────────────────────────────────────
 
@@ -170,7 +171,7 @@ function ImagePicker({ value, onChange }: ImagePickerProps) {
                     ${value === img.url ? 'border-indigo-500 ring-2 ring-indigo-200' : 'border-transparent hover:border-indigo-300'}`}
                   onClick={() => onChange(img.url)}
                 >
-                  <Image src={img.url} alt={img.name} fill className="object-cover" sizes="120px" />
+                  <Image src={getStaticUrl(img.url)} alt={img.name} fill className="object-cover" sizes="120px" />
                   {value === img.url && (
                     <div className="absolute inset-0 bg-indigo-600/20 flex items-center justify-center">
                       <CheckCircle2 className="h-5 w-5 text-white drop-shadow" />
@@ -404,7 +405,7 @@ export function EventosManager() {
                     <div className="flex items-center gap-3">
                       <div className="relative h-10 w-16 flex-shrink-0 overflow-hidden rounded-md bg-muted">
                         {evento.imagen ? (
-                          <Image src={evento.imagen} alt={evento.nombre} fill className="object-cover" sizes="64px" />
+                          <Image src={getStaticUrl(evento.imagen)} alt={evento.nombre} fill className="object-cover" sizes="64px" />
                         ) : (
                           <div className="flex h-full items-center justify-center">
                             <Calendar className="h-4 w-4 text-muted-foreground/40" />

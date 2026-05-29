@@ -24,6 +24,7 @@ import {
   Plus, Pencil, Trash2, ImageIcon, ChevronUp, ChevronDown,
   Upload, Zap, Check, Layers, Eye, EyeOff, Images, TriangleAlert,
 } from 'lucide-react'
+import { getStaticUrl } from '@/lib/utils'
 
 // ─── Catálogos ────────────────────────────────────────────────────────────────
 
@@ -393,7 +394,7 @@ export function SlidesManager() {
                 className="group relative aspect-video overflow-hidden rounded-lg border bg-muted"
               >
                 <img
-                  src={img.url}
+                  src={getStaticUrl(img.url)}
                   alt={img.name}
                   className="h-full w-full object-cover"
                 />
@@ -572,7 +573,7 @@ export function SlidesManager() {
                         {/* Miniatura */}
                         <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-muted">
                           {slide.urlImagen
-                            ? <img src={slide.urlImagen} alt="" className="h-full w-full object-cover" />
+                            ? <img src={getStaticUrl(slide.urlImagen)} alt="" className="h-full w-full object-cover" />
                             : <div className="flex h-full items-center justify-center"><ImageIcon className="h-5 w-5 text-muted-foreground/40" /></div>
                           }
                         </div>
@@ -630,7 +631,7 @@ export function SlidesManager() {
           <div className="space-y-3 py-2">
             {renameImg && (
               <div className="h-24 overflow-hidden rounded-lg bg-muted">
-                <img src={renameImg.url} alt="" className="h-full w-full object-cover" />
+                <img src={getStaticUrl(renameImg.url)} alt="" className="h-full w-full object-cover" />
               </div>
             )}
             <div className="space-y-1.5">
@@ -724,7 +725,7 @@ export function SlidesManager() {
                     {imagenes.map(img => (
                       <SelectItem key={img.name} value={img.url}>
                         <span className="flex items-center gap-2">
-                          <img src={img.url} alt={img.name} className="h-6 w-10 rounded object-cover shrink-0" />
+                          <img src={getStaticUrl(img.url)} alt={img.name} className="h-6 w-10 rounded object-cover shrink-0" />
                           <span className="truncate max-w-[260px] text-sm">{img.name}</span>
                         </span>
                       </SelectItem>
@@ -736,7 +737,7 @@ export function SlidesManager() {
               {/* Preview de la imagen seleccionada */}
               {formSlide.urlImagen && (
                 <div className="h-36 overflow-hidden rounded-xl border bg-muted">
-                  <img src={formSlide.urlImagen} alt="preview" className="h-full w-full object-cover" />
+                  <img src={getStaticUrl(formSlide.urlImagen)} alt="preview" className="h-full w-full object-cover" />
                 </div>
               )}
             </section>

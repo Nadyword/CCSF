@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Calendar, Clock, MapPin, Sparkles, ArrowRight, Star } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getStaticUrl } from '@/lib/utils'
 
 export function FeaturedEvent() {
   const { eventos } = useData()
@@ -80,7 +81,7 @@ export function FeaturedEvent() {
               {eventoDestacado.imagen ? (
                 <>
                   <Image
-                    src={eventoDestacado.imagen}
+                    src={getStaticUrl(eventoDestacado.imagen)}
                     alt={eventoDestacado.nombre}
                     fill
                     className="object-cover"

@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useData } from '@/contexts/data-context'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { SlideCarrusel } from '@/lib/types'
+import { getStaticUrl } from '@/lib/utils'
 
 // ─── Mapeo de opciones a valores CSS ──────────────────────────────────────────
 
@@ -138,7 +139,7 @@ export function HeroCarousel() {
 function SlideContent({ slide }: { slide: SlideCarrusel }) {
   return (
     <div className="relative h-full w-full">
-      <Image src={slide.urlImagen} alt={slide.titulo ?? 'Slide'} fill
+      <Image src={getStaticUrl(slide.urlImagen)} alt={slide.titulo ?? 'Slide'} fill
         className="object-cover" priority sizes="100vw" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
       {(slide.titulo || slide.subtitulo) && (

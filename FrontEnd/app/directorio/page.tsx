@@ -12,6 +12,7 @@ import { Store, Search, MapPin, Clock, Phone, Building2, ChevronLeft, ChevronRig
 import { Skeleton } from '@/components/ui/skeleton'
 import Image from 'next/image'
 import type { Categoria, Local } from '@/lib/types'
+import { getStaticUrl } from '@/lib/utils'
 
 const PAGE_SIZE_OPTIONS = [10, 20] as const
 
@@ -176,7 +177,7 @@ export default function DirectorioPage() {
               >
                 <div className="relative h-40 bg-gradient-to-br from-[#4051B5]/20 to-[#4051B5]/5 overflow-hidden">
                   {local.imagen ? (
-                    <Image src={local.imagen} alt={local.nombre} fill className="object-cover" sizes="320px" />
+                    <Image src={getStaticUrl(local.imagen)} alt={local.nombre} fill className="object-cover" sizes="320px" />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Store className="h-12 w-12 text-[#4051B5]/30" />
@@ -263,7 +264,7 @@ export default function DirectorioPage() {
             <div className="space-y-4">
               <div className="relative h-48 rounded-lg bg-gradient-to-br from-[#4051B5]/20 to-[#4051B5]/5 overflow-hidden flex items-center justify-center">
                 {selectedLocal.imagen ? (
-                  <Image src={selectedLocal.imagen} alt={selectedLocal.nombre} fill className="object-cover" sizes="480px" />
+                  <Image src={getStaticUrl(selectedLocal.imagen)} alt={selectedLocal.nombre} fill className="object-cover" sizes="480px" />
                 ) : (
                   <Store className="h-16 w-16 text-[#4051B5]/30" />
                 )}

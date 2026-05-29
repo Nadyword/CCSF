@@ -10,6 +10,7 @@ import { Store, MapPin, ArrowRight, Sparkles, Star } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import Image from 'next/image'
 import type { Local } from '@/lib/types'
+import { getStaticUrl } from '@/lib/utils'
 
 function pickStableSix(list: Local[]) {
   return [...list].sort((a, b) => a.id.localeCompare(b.id)).slice(0, 6)
@@ -93,7 +94,7 @@ export function RandomStores() {
                 >
                   {local.imagen ? (
                     <>
-                      <Image src={local.imagen} alt={local.nombre} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="400px" />
+                      <Image src={getStaticUrl(local.imagen)} alt={local.nombre} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="400px" />
                       <div className="absolute inset-0 bg-black/20" />
                     </>
                   ) : (
