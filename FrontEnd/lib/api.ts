@@ -374,7 +374,7 @@ export interface ImagenLocal {
 }
 
 export async function fetchImagenesLocales(): Promise<ImagenLocal[]> {
-  const res = await fetch('/api/locales')
+  const res = await fetch('/gallery/locales')
   if (!res.ok) return []
   return res.json()
 }
@@ -382,7 +382,7 @@ export async function fetchImagenesLocales(): Promise<ImagenLocal[]> {
 export async function uploadImagenLocal(file: File): Promise<ImagenLocal> {
   const form = new FormData()
   form.append('archivo', file)
-  const res = await fetch('/api/locales', { method: 'POST', body: form })
+  const res = await fetch('/gallery/locales', { method: 'POST', body: form })
   if (!res.ok) {
     const data = await res.json().catch(() => ({})) as { error?: string }
     throw new Error(data.error ?? `Error al subir: ${res.status}`)
@@ -391,7 +391,7 @@ export async function uploadImagenLocal(file: File): Promise<ImagenLocal> {
 }
 
 export async function deleteImagenLocal(filename: string): Promise<void> {
-  const res = await fetch(`/api/locales/${encodeURIComponent(filename)}`, { method: 'DELETE' })
+  const res = await fetch(`/gallery/locales/${encodeURIComponent(filename)}`, { method: 'DELETE' })
   if (!res.ok) throw new Error(`Error al eliminar: ${res.status}`)
 }
 
@@ -404,7 +404,7 @@ export interface ImagenEvento {
 }
 
 export async function fetchImagenesEventos(): Promise<ImagenEvento[]> {
-  const res = await fetch('/api/eventos')
+  const res = await fetch('/gallery/eventos')
   if (!res.ok) return []
   return res.json()
 }
@@ -412,7 +412,7 @@ export async function fetchImagenesEventos(): Promise<ImagenEvento[]> {
 export async function uploadImagenEvento(file: File): Promise<ImagenEvento> {
   const form = new FormData()
   form.append('archivo', file)
-  const res = await fetch('/api/eventos', { method: 'POST', body: form })
+  const res = await fetch('/gallery/eventos', { method: 'POST', body: form })
   if (!res.ok) {
     const data = await res.json().catch(() => ({})) as { error?: string }
     throw new Error(data.error ?? `Error al subir: ${res.status}`)
@@ -421,7 +421,7 @@ export async function uploadImagenEvento(file: File): Promise<ImagenEvento> {
 }
 
 export async function deleteImagenEvento(filename: string): Promise<void> {
-  const res = await fetch(`/api/eventos/${encodeURIComponent(filename)}`, { method: 'DELETE' })
+  const res = await fetch(`/gallery/eventos/${encodeURIComponent(filename)}`, { method: 'DELETE' })
   if (!res.ok) throw new Error(`Error al eliminar: ${res.status}`)
 }
 
@@ -434,7 +434,7 @@ export interface ImagenGaleria {
 }
 
 export async function fetchImagenesCarrusel(): Promise<ImagenGaleria[]> {
-  const res = await fetch('/api/carrusel')
+  const res = await fetch('/gallery/carrusel')
   if (!res.ok) return []
   return res.json()
 }
@@ -442,7 +442,7 @@ export async function fetchImagenesCarrusel(): Promise<ImagenGaleria[]> {
 export async function uploadImagenesCarrusel(files: File[]): Promise<ImagenGaleria[]> {
   const form = new FormData()
   files.forEach(f => form.append('archivos', f))
-  const res = await fetch('/api/carrusel', { method: 'POST', body: form })
+  const res = await fetch('/gallery/carrusel', { method: 'POST', body: form })
   if (!res.ok) {
     const data = await res.json().catch(() => ({})) as { error?: string }
     throw new Error(data.error ?? `Error al subir: ${res.status}`)
@@ -451,12 +451,12 @@ export async function uploadImagenesCarrusel(files: File[]): Promise<ImagenGaler
 }
 
 export async function deleteImagenCarrusel(filename: string): Promise<void> {
-  const res = await fetch(`/api/carrusel/${encodeURIComponent(filename)}`, { method: 'DELETE' })
+  const res = await fetch(`/gallery/carrusel/${encodeURIComponent(filename)}`, { method: 'DELETE' })
   if (!res.ok) throw new Error(`Error al eliminar: ${res.status}`)
 }
 
 export async function renameImagenCarrusel(filename: string, newName: string): Promise<ImagenGaleria> {
-  const res = await fetch(`/api/carrusel/${encodeURIComponent(filename)}`, {
+  const res = await fetch(`/gallery/carrusel/${encodeURIComponent(filename)}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ newName }),

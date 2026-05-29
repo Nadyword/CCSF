@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { unlink, rename, stat } from 'fs/promises'
 import path from 'path'
 
-const CARRUSEL_DIR = path.join(process.cwd(), 'public', 'carrusel')
+const CARRUSEL_DIR = path.join(process.cwd(), 'public', 'Carrusel')
 const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
 
 function safeName(name: string): boolean {
@@ -45,7 +45,7 @@ export async function PATCH(
   try {
     await stat(path.join(CARRUSEL_DIR, filename))
     await rename(path.join(CARRUSEL_DIR, filename), path.join(CARRUSEL_DIR, newName))
-    return NextResponse.json({ name: newName, url: `/carrusel/${newName}` })
+    return NextResponse.json({ name: newName, url: `/Carrusel/${newName}` })
   } catch {
     return NextResponse.json({ error: 'Archivo no encontrado.' }, { status: 404 })
   }

@@ -5,7 +5,7 @@ import path from 'path'
 
 const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
 const MAX_SIZE = 3 * 1024 * 1024
-const CARRUSEL_DIR = path.join(process.cwd(), 'public', 'carrusel')
+const CARRUSEL_DIR = path.join(process.cwd(), 'public', 'Carrusel')
 
 function ensureDir() {
   if (!existsSync(CARRUSEL_DIR)) mkdirSync(CARRUSEL_DIR, { recursive: true })
@@ -19,7 +19,7 @@ export async function GET() {
     const result = await Promise.all(
       items.map(async name => {
         const s = await stat(path.join(CARRUSEL_DIR, name))
-        return { name, url: `/carrusel/${name}`, size: s.size, modified: s.mtime.toISOString() }
+        return { name, url: `/Carrusel/${name}`, size: s.size, modified: s.mtime.toISOString() }
       })
     )
     result.sort((a, b) => b.modified.localeCompare(a.modified))
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     const name = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}${ext}`
     const bytes = await archivo.arrayBuffer()
     await writeFile(path.join(CARRUSEL_DIR, name), Buffer.from(bytes))
-    results.push({ name, url: `/carrusel/${name}` })
+    results.push({ name, url: `/Carrusel/${name}` })
   }
 
   return NextResponse.json(results, { status: 201 })
