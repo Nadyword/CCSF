@@ -7,27 +7,6 @@ namespace BackEnd.Repositories;
 
 public class LocalRepository(AppDbContext db) : ILocalRepository
 {
-    private static LocalDto ToDto(Local l) => new()
-    {
-        Id          = l.Id,
-        Nombre      = l.Nombre,
-        NumeroLocal = l.NumeroLocal,
-        Nivel       = l.Nivel,
-        Descripcion = l.Descripcion,
-        UrlFoto     = l.UrlFoto,
-        Categorias  = l.LocalCategorias
-                       .Select(lc => new CategoriaDto { Id = lc.Categoria.Id, Nombre = lc.Categoria.Nombre, Color = lc.Categoria.Color })
-                       .OrderBy(c => c.Nombre)
-                       .ToList(),
-        Horario     = l.Horario,
-        Telefono    = l.Telefono,
-    };
-
-    private IQueryable<Local> WithCategorias() =>
-        db.Locales
-          .Include(l => l.LocalCategorias)
-          .ThenInclude(lc => lc.Categoria);
-
     public async Task<IEnumerable<LocalDto>> GetRandomAsync(int cantidad = 6) =>
         await WithCategorias()
             .OrderBy(_ => Guid.NewGuid())
@@ -41,12 +20,12 @@ public class LocalRepository(AppDbContext db) : ILocalRepository
 
         if (!string.IsNullOrWhiteSpace(busqueda))
             query = query.Where(l =>
-                l.Nombre.ToLower().Contains(busqueda.ToLower()) ||
-                l.Descripcion.ToLower().Contains(busqueda.ToLower()));
+                l.Nombre.Contains(busqueda, StringComparison.CurrentCultureIgnoreCase) ||
+                l.Descripcion.Contains(busqueda, StringComparison.CurrentCultureIgnoreCase));
 
         if (!string.IsNullOrWhiteSpace(categoria))
             query = query.Where(l =>
-                l.LocalCategorias.Any(lc => lc.Categoria.Nombre.ToLower() == categoria.ToLower()));
+                l.LocalCategorias.Any(lc => lc.Categoria.Nombre.Equals(categoria, StringComparison.CurrentCultureIgnoreCase)));
 
         return (await query.OrderBy(l => l.Nombre).ToListAsync()).Select(ToDto);
     }
@@ -61,13 +40,13 @@ public class LocalRepository(AppDbContext db) : ILocalRepository
     {
         var local = new Local
         {
-            Nombre      = dto.Nombre.Trim(),
+            Nombre = dto.Nombre.Trim(),
             NumeroLocal = dto.NumeroLocal.Trim(),
-            Nivel       = dto.Nivel.Trim(),
+            Nivel = dto.Nivel.Trim(),
             Descripcion = dto.Descripcion.Trim(),
-            UrlFoto     = dto.UrlFoto,
-            Horario     = dto.Horario.Trim(),
-            Telefono    = dto.Telefono?.Trim(),
+            UrlFoto = dto.UrlFoto,
+            Horario = dto.Horario.Trim(),
+            Telefono = dto.Telefono?.Trim(),
         };
 
         db.Locales.Add(local);
@@ -90,13 +69,13 @@ public class LocalRepository(AppDbContext db) : ILocalRepository
         var local = await WithCategorias().FirstOrDefaultAsync(l => l.Id == id);
         if (local is null) return null;
 
-        local.Nombre      = dto.Nombre.Trim();
+        local.Nombre = dto.Nombre.Trim();
         local.NumeroLocal = dto.NumeroLocal.Trim();
-        local.Nivel       = dto.Nivel.Trim();
+        local.Nivel = dto.Nivel.Trim();
         local.Descripcion = dto.Descripcion.Trim();
-        local.UrlFoto     = dto.UrlFoto;
-        local.Horario     = dto.Horario.Trim();
-        local.Telefono    = dto.Telefono?.Trim();
+        local.UrlFoto = dto.UrlFoto;
+        local.Horario = dto.Horario.Trim();
+        local.Telefono = dto.Telefono?.Trim();
 
         // Reemplazar categorías: borrar las actuales y agregar las nuevas
         db.LocalCategorias.RemoveRange(local.LocalCategorias);
@@ -112,10 +91,31 @@ public class LocalRepository(AppDbContext db) : ILocalRepository
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var local = await db.Locales.FindAsync(id);
+        var local = await db.Locales.FirstOrDefaultAsync(l => l.Id == id);
         if (local is null) return false;
         db.Locales.Remove(local);
         await db.SaveChangesAsync();
         return true;
     }
+
+    private static LocalDto ToDto(Local l) => new()
+    {
+        Id = l.Id,
+        Nombre = l.Nombre,
+        NumeroLocal = l.NumeroLocal,
+        Nivel = l.Nivel,
+        Descripcion = l.Descripcion,
+        UrlFoto = l.UrlFoto,
+        Categorias = l.LocalCategorias
+                       .Select(lc => new CategoriaDto { Id = lc.Categoria.Id, Nombre = lc.Categoria.Nombre, Color = lc.Categoria.Color })
+                       .OrderBy(c => c.Nombre)
+                       .ToList(),
+        Horario = l.Horario,
+        Telefono = l.Telefono,
+    };
+
+    private IQueryable<Local> WithCategorias() =>
+        db.Locales
+          .Include(l => l.LocalCategorias)
+          .ThenInclude(lc => lc.Categoria);
 }
