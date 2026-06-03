@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useSyncExternalStore, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useCallback, useSyncExternalStore, type ReactNode } from 'react'
 import type { Usuario } from '@/lib/types'
 import { loginApi } from '@/lib/api'
 
@@ -15,6 +15,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 const SESSION_KEY = 'cc_session'
 const TOKEN_KEY = 'cc_token'
+const TOKEN_EXP_KEY = 'cc_token_exp'
 
 const sessionListeners = new Set<() => void>()
 let cachedRawSession: string | null | undefined
@@ -29,10 +30,36 @@ function notifySessionChange() {
   sessionListeners.forEach((listener) => listener())
 }
 
+function decodeJwtExp(token: string): number | null {
+  try {
+    const base64Url = token.split('.')[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const payload = JSON.parse(atob(base64)) as Record<string, unknown>
+    return typeof payload.exp === 'number' ? payload.exp : null
+  } catch {
+    return null
+  }
+}
+
+function clearSessionStorage() {
+  localStorage.removeItem(SESSION_KEY)
+  localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(TOKEN_EXP_KEY)
+  cachedRawSession = null
+  cachedSessionSnapshot = null
+}
+
 function getSessionSnapshot(): Usuario | null {
   if (typeof window === 'undefined') return null
-  const rawSession = localStorage.getItem(SESSION_KEY)
 
+  // Si el token ya venció, limpiar sesión inmediatamente (cubre recarga de página)
+  const expRaw = localStorage.getItem(TOKEN_EXP_KEY)
+  if (expRaw && Number(expRaw) * 1000 <= Date.now()) {
+    clearSessionStorage()
+    return null
+  }
+
+  const rawSession = localStorage.getItem(SESSION_KEY)
   if (rawSession === cachedRawSession) return cachedSessionSnapshot
 
   cachedRawSession = rawSession
@@ -60,11 +87,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
   const isLoading = false
 
+  const logout = useCallback(() => {
+    clearSessionStorage()
+    notifySessionChange()
+  }, [])
+
+  // Programa el cierre de sesión automático cuando vence el JWT
+  useEffect(() => {
+    if (!usuario) return
+    const expRaw = localStorage.getItem(TOKEN_EXP_KEY)
+    if (!expRaw) return
+    const remaining = Number(expRaw) * 1000 - Date.now()
+    if (remaining <= 0) {
+      logout()
+      return
+    }
+    const timer = setTimeout(logout, remaining)
+    return () => clearTimeout(timer)
+  }, [usuario, logout])
+
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
       const data = await loginApi(username, password)
-
+      const exp = decodeJwtExp(data.token)
       localStorage.setItem(TOKEN_KEY, data.token)
+      if (exp) localStorage.setItem(TOKEN_EXP_KEY, String(exp))
       localStorage.setItem(SESSION_KEY, JSON.stringify({
         id: data.username,
         username: data.username,
@@ -77,12 +124,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       return false
     }
-  }
-
-  const logout = () => {
-    localStorage.removeItem(SESSION_KEY)
-    localStorage.removeItem(TOKEN_KEY)
-    notifySessionChange()
   }
 
   return (
