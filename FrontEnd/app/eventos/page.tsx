@@ -101,14 +101,14 @@ export default function EventosPage() {
           </div>
         ) : (
           <div className="space-y-12">
-            {Object.entries(eventosPorMes).map(([mes, eventosDelMes]) => (
+            {Object.entries(eventosPorMes).map(([mes, eventosDelMes], mesIdx) => (
               <div key={mes}>
                 <h2 className="mb-6 text-xl font-semibold capitalize text-foreground">
                   {mes}
                 </h2>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {eventosDelMes.map((evento) => (
-                    <Card 
+                  {eventosDelMes.map((evento, eventoIdx) => (
+                    <Card
                       key={evento.id}
                       className="group cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg"
                       onClick={() => setSelectedEvento(evento)}
@@ -121,7 +121,8 @@ export default function EventosPage() {
                             alt={evento.nombre}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            sizes="(max-width: 639px) calc(100vw - 32px), (max-width: 1023px) calc(50vw - 40px), 390px"
+                            priority={mesIdx === 0 && eventoIdx < 3}
                           />
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center">

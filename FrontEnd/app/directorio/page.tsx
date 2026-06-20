@@ -169,7 +169,7 @@ export default function DirectorioPage() {
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {paginatedLocales.map((local) => (
+            {paginatedLocales.map((local, index) => (
               <Card
                 key={local.id}
                 className="group cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg"
@@ -177,7 +177,14 @@ export default function DirectorioPage() {
               >
                 <div className="relative h-40 bg-gradient-to-br from-[#4051B5]/20 to-[#4051B5]/5 overflow-hidden">
                   {local.imagen ? (
-                    <Image src={getStaticUrl(local.imagen)} alt={local.nombre} fill className="object-cover" sizes="320px" />
+                    <Image
+                      src={getStaticUrl(local.imagen)}
+                      alt={local.nombre}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 639px) calc(100vw - 32px), (max-width: 1023px) calc(50vw - 40px), (max-width: 1279px) calc(33vw - 44px), 296px"
+                      priority={index < 4}
+                    />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Store className="h-12 w-12 text-[#4051B5]/30" />

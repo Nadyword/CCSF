@@ -94,7 +94,13 @@ export function RandomStores() {
                 >
                   {local.imagen ? (
                     <>
-                      <Image src={getStaticUrl(local.imagen)} alt={local.nombre} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="400px" />
+                      <Image
+                      src={getStaticUrl(local.imagen)}
+                      alt={local.nombre}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 639px) calc(100vw - 32px), (max-width: 1023px) calc(50vw - 44px), 390px"
+                    />
                       <div className="absolute inset-0 bg-black/20" />
                     </>
                   ) : (
