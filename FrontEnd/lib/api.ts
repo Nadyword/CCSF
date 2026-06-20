@@ -25,7 +25,7 @@ export async function loginApi(username: string, password: string): Promise<Logi
 
 function getAuthHeaders(): Record<string, string> {
   if (typeof window === 'undefined') return {}
-  const token = localStorage.getItem(TOKEN_KEY)
+  const token = sessionStorage.getItem(TOKEN_KEY)
   return token ? { Authorization: `Bearer ${token}` } : {}
 }
 

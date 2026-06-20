@@ -42,9 +42,9 @@ function decodeJwtExp(token: string): number | null {
 }
 
 function clearSessionStorage() {
-  localStorage.removeItem(SESSION_KEY)
-  localStorage.removeItem(TOKEN_KEY)
-  localStorage.removeItem(TOKEN_EXP_KEY)
+  sessionStorage.removeItem(SESSION_KEY)
+  sessionStorage.removeItem(TOKEN_KEY)
+  sessionStorage.removeItem(TOKEN_EXP_KEY)
   cachedRawSession = null
   cachedSessionSnapshot = null
 }
@@ -53,13 +53,13 @@ function getSessionSnapshot(): Usuario | null {
   if (typeof window === 'undefined') return null
 
   // Si el token ya venció, limpiar sesión inmediatamente (cubre recarga de página)
-  const expRaw = localStorage.getItem(TOKEN_EXP_KEY)
+  const expRaw = sessionStorage.getItem(TOKEN_EXP_KEY)
   if (expRaw && Number(expRaw) * 1000 <= Date.now()) {
     clearSessionStorage()
     return null
   }
 
-  const rawSession = localStorage.getItem(SESSION_KEY)
+  const rawSession = sessionStorage.getItem(SESSION_KEY)
   if (rawSession === cachedRawSession) return cachedSessionSnapshot
 
   cachedRawSession = rawSession
@@ -72,7 +72,7 @@ function getSessionSnapshot(): Usuario | null {
     cachedSessionSnapshot = JSON.parse(rawSession) as Usuario
     return cachedSessionSnapshot
   } catch {
-    localStorage.removeItem(SESSION_KEY)
+    sessionStorage.removeItem(SESSION_KEY)
     cachedRawSession = null
     cachedSessionSnapshot = null
     return null
@@ -95,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Programa el cierre de sesión automático cuando vence el JWT
   useEffect(() => {
     if (!usuario) return
-    const expRaw = localStorage.getItem(TOKEN_EXP_KEY)
+    const expRaw = sessionStorage.getItem(TOKEN_EXP_KEY)
     if (!expRaw) return
     const remaining = Number(expRaw) * 1000 - Date.now()
     if (remaining <= 0) {
@@ -110,9 +110,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const data = await loginApi(username, password)
       const exp = decodeJwtExp(data.token)
-      localStorage.setItem(TOKEN_KEY, data.token)
-      if (exp) localStorage.setItem(TOKEN_EXP_KEY, String(exp))
-      localStorage.setItem(SESSION_KEY, JSON.stringify({
+      sessionStorage.setItem(TOKEN_KEY, data.token)
+      if (exp) sessionStorage.setItem(TOKEN_EXP_KEY, String(exp))
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
         id: data.username,
         username: data.username,
         password: '',
