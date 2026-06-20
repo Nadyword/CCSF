@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Proyectos\CCSF\Publish</_PublishTargetUrl>
+    <History>True|2026-06-20T21:56:16.5830213Z||;True|2026-06-20T17:55:05.1655064-04:00||;</History>
+    <LastFailureDetails />
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=localhost%3bDatabase=SantaFeDB%3bUser Id=postgres%3bPassword=Sa753951.%3bTrustServerCertificate=True%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="BackEnd.Data.AppDbContext">
+      <Value>Server=localhost%3bDatabase=SantaFeDB%3bUser Id=postgres%3bPassword=Sa753951.%3bTrustServerCertificate=True%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

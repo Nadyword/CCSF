@@ -39,7 +39,7 @@ public class LocalesController(ILocalRepository localRepo) : ControllerBase
 
     /// <summary>POST /api/locales</summary>
     [Authorize]
-    [HttpPost("locales")]
+    [HttpPost]
     public async Task<IActionResult> Create([FromBody] UpsertLocalDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Nombre))
