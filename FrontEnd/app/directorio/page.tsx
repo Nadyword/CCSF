@@ -260,7 +260,7 @@ export default function DirectorioPage() {
 
       {/* Modal Detalle */}
       <Dialog open={!!selectedLocal} onOpenChange={() => setSelectedLocal(null)}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
               <Store className="h-5 w-5 text-[#4051B5]" />
@@ -269,11 +269,11 @@ export default function DirectorioPage() {
           </DialogHeader>
           {selectedLocal && (
             <div className="space-y-4">
-              <div className="relative h-48 rounded-lg bg-gradient-to-br from-[#4051B5]/20 to-[#4051B5]/5 overflow-hidden flex items-center justify-center">
+              <div className="relative w-full rounded-lg bg-gradient-to-br from-[#4051B5]/10 to-[#4051B5]/5 overflow-hidden flex items-center justify-center" style={{ aspectRatio: '4/3' }}>
                 {selectedLocal.imagen ? (
-                  <Image src={getStaticUrl(selectedLocal.imagen)} alt={selectedLocal.nombre} fill className="object-cover" sizes="480px" />
+                  <Image src={getStaticUrl(selectedLocal.imagen)} alt={selectedLocal.nombre} fill className="object-contain" sizes="(max-width: 672px) 100vw, 640px" />
                 ) : (
-                  <Store className="h-16 w-16 text-[#4051B5]/30" />
+                  <Store className="h-20 w-20 text-[#4051B5]/30" />
                 )}
               </div>
 
