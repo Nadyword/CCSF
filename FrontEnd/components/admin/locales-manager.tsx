@@ -104,7 +104,7 @@ function ImagePickerLocal({ value, onChange }: { value: string | null; onChange:
           </div>
         ) : value ? (
           <>
-            <Image src={value} alt="Vista previa" fill className="object-cover" sizes="480px" />
+            <Image src={getStaticUrl(value)} alt="Vista previa" fill className="object-cover" sizes="480px" />
             <div className="absolute inset-0 bg-black/30 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
               <span className="text-white text-sm font-medium flex items-center gap-1">
                 <Upload className="h-4 w-4" /> Cambiar imagen
