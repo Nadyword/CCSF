@@ -6,9 +6,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, MapPin, Clock, Calendar, Sparkles, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { infoCC } from '@/lib/data'
-import { useData } from '@/contexts/data-context'
-import { Skeleton } from '@/components/ui/skeleton'
-import type { SlideCarrusel } from '@/lib/types'
+import type { PerfilCarrusel, SlideCarrusel } from '@/lib/types'
 import { getStaticUrl } from '@/lib/utils'
 
 // ─── Mapeo de opciones a valores CSS ─────────────────────────────────────────
@@ -38,9 +36,10 @@ const ANIM_CLASS: Record<SlideCarrusel['animacionEntrada'], string> = {
 
 // ─── Componente principal ─────────────────────────────────────────────────────
 
-export function HeroSection() {
-  const { perfilActivo, loadingPerfilActivo } = useData()
-  const slides = perfilActivo?.slides ?? []
+interface HeroSectionProps { perfil: PerfilCarrusel | null }
+
+export function HeroSection({ perfil }: HeroSectionProps) {
+  const slides = perfil?.slides ?? []
 
   const [activeIdx, setActiveIdx]         = useState(0)
   const [prevIdx, setPrevIdx]             = useState<number | null>(null)
@@ -67,7 +66,7 @@ export function HeroSection() {
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
   }, [activeIdx, slides, next])
 
-  useEffect(() => { setActiveIdx(0); setAnimKey(0) }, [perfilActivo?.id])
+  useEffect(() => { setActiveIdx(0); setAnimKey(0) }, [perfil?.id])
 
   const activeSlide = slides[activeIdx] ?? null
   const prevSlide   = prevIdx !== null ? slides[prevIdx] : null
@@ -80,13 +79,13 @@ export function HeroSection() {
     <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#1E1B4B] via-[#3730A3] to-[#1E1B4B]">
 
       {/* ── FONDO: slides del carrusel ─────────────────────────────────────── */}
-      {!loadingPerfilActivo && prevSlide && (
+      {prevSlide && (
         <div key={`prev-${prevIdx}`} className="carousel-exit absolute inset-0 z-0">
           <Image src={getStaticUrl(prevSlide.urlImagen)} alt="" fill className="object-cover" priority sizes="100vw" />
         </div>
       )}
 
-      {!loadingPerfilActivo && activeSlide && (
+      {activeSlide && (
         <div
           key={`active-${animKey}`}
           className={`absolute inset-0 z-[1] ${ANIM_CLASS[activeSlide.animacionEntrada]}`}
@@ -96,13 +95,6 @@ export function HeroSection() {
           } as React.CSSProperties}
         >
           <Image src={getStaticUrl(activeSlide.urlImagen)} alt="" fill className="object-cover" priority sizes="100vw" />
-        </div>
-      )}
-
-      {/* Skeleton mientras carga */}
-      {loadingPerfilActivo && (
-        <div className="absolute inset-0 z-[1]">
-          <Skeleton className="h-full w-full rounded-none" />
         </div>
       )}
 

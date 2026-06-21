@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useData } from '@/contexts/data-context'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Store, MapPin, ArrowRight, Sparkles, Star } from 'lucide-react'
-import { Skeleton } from '@/components/ui/skeleton'
 import Image from 'next/image'
 import type { Local } from '@/lib/types'
 import { getStaticUrl } from '@/lib/utils'
@@ -21,9 +19,9 @@ function pickRandomSix(list: Local[]) {
   return shuffled.slice(0, 6)
 }
 
-export function RandomStores() {
-  const { locales, loadingLocales } = useData()
+interface RandomStoresProps { locales: Local[] }
 
+export function RandomStores({ locales }: RandomStoresProps) {
   // Mismo HTML en SSR y primer paint del cliente; aleatorizar solo tras hidratar
   const [localesAleatorios, setLocalesAleatorios] = useState(() =>
     pickStableSix(locales)
@@ -63,22 +61,7 @@ export function RandomStores() {
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {loadingLocales ? (
-            Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="overflow-hidden rounded-3xl border-0 bg-card card-shadow">
-                <Skeleton className="h-56 w-full rounded-none" />
-                <div className="p-7 space-y-3">
-                  <Skeleton className="h-5 w-3/4" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-2/3" />
-                  <div className="flex items-center gap-3 mt-6">
-                    <Skeleton className="h-10 w-10 rounded-xl" />
-                    <Skeleton className="h-4 w-1/2" />
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : localesAleatorios.map((local, index) => {
+          {localesAleatorios.map((local, index) => {
             const firstCat = local.categorias[0]
             const style = getCategoryStyle(firstCat?.color)
             return (

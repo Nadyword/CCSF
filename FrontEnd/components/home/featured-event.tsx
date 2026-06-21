@@ -1,19 +1,17 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useData } from '@/contexts/data-context'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, Clock, MapPin, Sparkles, ArrowRight, Star } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getStaticUrl } from '@/lib/utils'
+import type { Evento } from '@/lib/types'
 
-export function FeaturedEvent() {
-  const { eventos } = useData()
+interface FeaturedEventProps { eventoDestacado: Evento | null }
 
-  // El evento destacado es el que tiene destacado=true en la BD (máximo uno)
-  const eventoDestacado = eventos.find(e => e.destacado) ?? null
+export function FeaturedEvent({ eventoDestacado }: FeaturedEventProps) {
 
   const fechaFormateada = useMemo(() => {
     if (!eventoDestacado) return ''
