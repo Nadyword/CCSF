@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import { Montserrat, DM_Serif_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { AuthProvider } from '@/contexts/auth-context'
-import { DataProvider } from '@/contexts/data-context'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import './globals.css'
@@ -62,11 +61,9 @@ export default function RootLayout({
           <div className="orb orb-f" />
         </div>
         <AuthProvider>
-          <DataProvider>
-            <Navbar />
-            {children}
-            <Footer />
-          </DataProvider>
+          <Navbar />
+          {children}
+          <Footer />
         </AuthProvider>
         <Analytics />
       </body>

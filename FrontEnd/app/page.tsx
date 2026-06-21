@@ -1,16 +1,27 @@
-'use client'
-
 import { HeroSection } from '@/components/home/hero-section'
 import { FeaturedEvent } from '@/components/home/featured-event'
 import { RandomStores } from '@/components/home/random-stores'
 import { InfoSection } from '@/components/home/info-section'
+import {
+  fetchPerfilActivoServer,
+  fetchEventosServer,
+  fetchLocalesServer,
+} from '@/lib/server-api'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [perfil, eventos, locales] = await Promise.all([
+    fetchPerfilActivoServer(),
+    fetchEventosServer(),
+    fetchLocalesServer(),
+  ])
+
+  const eventoDestacado = eventos.find(e => e.destacado) ?? null
+
   return (
     <main>
-      <HeroSection />
-      <FeaturedEvent />
-      <RandomStores />
+      <HeroSection perfil={perfil} />
+      <FeaturedEvent eventoDestacado={eventoDestacado} />
+      <RandomStores locales={locales} />
       <InfoSection />
     </main>
   )
