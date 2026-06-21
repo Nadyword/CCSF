@@ -14,7 +14,7 @@ import Image from 'next/image'
 import type { Categoria, Local } from '@/lib/types'
 import { getStaticUrl } from '@/lib/utils'
 
-const PAGE_SIZE_OPTIONS = [10, 20] as const
+const PAGE_SIZE_OPTIONS = [12, 24] as const
 
 /** Convierte un color hex en clases Tailwind inline de badge */
 function categoriaBadgeStyle(cat: Categoria): React.CSSProperties {
@@ -37,7 +37,7 @@ export default function DirectorioPage() {
   const [selectedCategoria, setSelectedCategoria] = useState<string | null>(null)
   const [selectedLocal, setSelectedLocal] = useState<Local | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
-  const [pageSize, setPageSize] = useState<10 | 20>(20)
+  const [pageSize, setPageSize] = useState<12 | 24>(12)
 
   const filteredLocales = useMemo(() => {
     return locales.filter(local => {
@@ -56,7 +56,7 @@ export default function DirectorioPage() {
 
   const handleSearch = (value: string) => { setSearchTerm(value); setCurrentPage(1) }
   const handleCategoria = (cat: string | null) => { setSelectedCategoria(cat); setCurrentPage(1) }
-  const handlePageSize = (value: string) => { setPageSize(Number(value) as 10 | 20); setCurrentPage(1) }
+  const handlePageSize = (value: string) => { setPageSize(Number(value) as 12 | 24); setCurrentPage(1) }
 
   return (
     <main className="min-h-screen pb-12">
