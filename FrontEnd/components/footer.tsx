@@ -34,14 +34,12 @@ export function Footer() {
                 <Image
                   src={infoCC.logo}
                   alt={infoCC.nombre}
-                  width={48}
-                  height={48}
-                  className="relative h-12 w-12 object-contain"
+                  width={80}
+                  height={80}
+                  className="relative h-20 w-20 object-contain"
                 />
               </div>
-              <span className="font-serif text-xl font-bold text-foreground">
-                Centro Comercial Santa Fe
-              </span>
+
             </Link>
             <p className="mt-6 max-w-md text-muted-foreground leading-relaxed">
               Tu destino de compras, entretenimiento y gastronomia. 

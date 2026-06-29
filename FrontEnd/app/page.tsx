@@ -1,4 +1,5 @@
 import { HeroSection } from '@/components/home/hero-section'
+import { WelcomeStrip } from '@/components/home/welcome-strip'
 import { FeaturedEvent } from '@/components/home/featured-event'
 import { RandomStores } from '@/components/home/random-stores'
 import { InfoSection } from '@/components/home/info-section'
@@ -20,6 +21,7 @@ export default async function HomePage() {
   return (
     <main>
       <HeroSection perfil={perfil} />
+      <WelcomeStrip />
       <FeaturedEvent eventoDestacado={eventoDestacado} />
       <RandomStores locales={locales} />
       <InfoSection />

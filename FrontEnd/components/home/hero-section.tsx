@@ -4,8 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, MapPin, Clock, Calendar, Sparkles, Star, ChevronLeft, ChevronRight } from 'lucide-react'
-import { infoCC } from '@/lib/data'
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { PerfilCarrusel, SlideCarrusel } from '@/lib/types'
 import { getStaticUrl } from '@/lib/utils'
 
@@ -103,30 +102,6 @@ export function HeroSection({ perfil }: HeroSectionProps) {
       <div className="relative z-[2] mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
         <div className="flex flex-col items-center text-center">
 
-          {/* Badge */}
-          <div className="mb-8 animate-slide-up">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-md border border-white/20 shadow-lg shadow-black/20">
-              <Sparkles className="h-4 w-4 text-[var(--brand-gold)]" />
-              Bienvenidos al mejor centro comercial
-              <Star className="h-3 w-3 text-[var(--brand-gold)] fill-[var(--brand-gold)]" />
-            </span>
-          </div>
-
-          {/* Logo */}
-          <div className="mb-10 animate-scale-in" style={{ animationDelay: '0.2s' }}>
-            <div className="relative">
-              <div className="absolute inset-0 blur-3xl bg-white/40 rounded-full scale-150 animate-pulse" />
-              <div className="absolute inset-0 blur-xl bg-[var(--brand-gold)]/30 rounded-full scale-125" />
-              <Image
-                src={infoCC.logo}
-                alt={infoCC.nombre}
-                width={160}
-                height={160}
-                className="relative h-32 w-32 sm:h-40 sm:w-40 object-contain brightness-0 invert drop-shadow-2xl"
-              />
-            </div>
-          </div>
-
           {/* Título — dinámico si el slide tiene titulo, fijo si no */}
           <h1
             key={`titulo-${animKey}`}
@@ -188,30 +163,6 @@ export function HeroSection({ perfil }: HeroSectionProps) {
             </Button>
           </div>
 
-          {/* Tarjetas de info */}
-          <div className="mt-24 grid w-full max-w-5xl gap-6 sm:grid-cols-3 animate-slide-up" style={{ animationDelay: '0.6s' }}>
-            <div className="group rounded-3xl bg-gradient-to-br from-[var(--brand-accent)]/20 to-[var(--brand-accent)]/5 p-8 backdrop-blur-md border border-white/10 transition-all duration-500 hover:bg-[var(--brand-accent)]/30 hover:border-[var(--brand-accent)]/30 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[var(--brand-accent)]/20">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--brand-accent)] text-white transition-all duration-300 group-hover:scale-110 shadow-lg shadow-[var(--brand-accent)]/50">
-                <MapPin className="h-8 w-8" />
-              </div>
-              <p className="mt-6 text-lg font-bold text-white">Ubicacion</p>
-              <p className="mt-2 text-sm text-white/70 font-medium">Av. José María Vargas, Santa Fe</p>
-            </div>
-            <div className="group rounded-3xl bg-gradient-to-br from-[var(--brand-gold)]/20 to-[var(--brand-gold)]/5 p-8 backdrop-blur-md border border-white/10 transition-all duration-500 hover:bg-[var(--brand-gold)]/30 hover:border-[var(--brand-gold)]/30 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[var(--brand-gold)]/20">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--brand-gold)] text-[var(--brand-secondary)] transition-all duration-300 group-hover:scale-110 shadow-lg shadow-[var(--brand-gold)]/50">
-                <Clock className="h-8 w-8" />
-              </div>
-              <p className="mt-6 text-lg font-bold text-white">Horario</p>
-              <p className="mt-2 text-sm text-white/70 font-medium">10:00 - 21:00 hrs</p>
-            </div>
-            <div className="group rounded-3xl bg-gradient-to-br from-[var(--brand-teal)]/20 to-[var(--brand-teal)]/5 p-8 backdrop-blur-md border border-white/10 transition-all duration-500 hover:bg-[var(--brand-teal)]/30 hover:border-[var(--brand-teal)]/30 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[var(--brand-teal)]/20">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--brand-teal)] text-white transition-all duration-300 group-hover:scale-110 shadow-lg shadow-[var(--brand-teal)]/50">
-                <Calendar className="h-8 w-8" />
-              </div>
-              <p className="mt-6 text-lg font-bold text-white">Abierto</p>
-              <p className="mt-2 text-sm text-white/70 font-medium">Todos los dias del año</p>
-            </div>
-          </div>
         </div>
       </div>
 
