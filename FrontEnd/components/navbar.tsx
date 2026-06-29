@@ -110,15 +110,13 @@ export function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button 
-                variant="outline" 
-                size="sm"
+              <button
                 onClick={() => setLoginOpen(true)}
-                className="gap-2 transition-all duration-300 hover:scale-105 border-[var(--brand-primary)] text-[var(--brand-primary)] hover:bg-[var(--brand-primary)] hover:text-white"
+                className="opacity-20 hover:opacity-60 transition-opacity duration-300 p-2 text-muted-foreground"
+                aria-label="Acceso Admin"
               >
-                <User className="h-4 w-4" />
-                <span className="hidden sm:inline">Acceso Admin</span>
-              </Button>
+                <User className="h-6 w-6" />
+              </button>
             )}
 
             {/* Mobile Menu Button */}
