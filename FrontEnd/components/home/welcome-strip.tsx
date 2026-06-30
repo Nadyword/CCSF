@@ -1,4 +1,5 @@
-import { MapPin, Clock, Calendar, Sparkles, Star } from 'lucide-react'
+import Link from 'next/link'
+import { MapPin, Clock, Calendar, Sparkles, Star, ArrowRight } from 'lucide-react'
 
 export function WelcomeStrip() {
   return (
@@ -45,6 +46,17 @@ export function WelcomeStrip() {
             <p className="mt-6 text-lg font-bold text-white text-center">Abierto</p>
             <p className="mt-2 text-sm text-white/70 font-medium text-center">Todos los días del año</p>
           </div>
+        </div>
+
+        {/* CTA Quiénes Somos */}
+        <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <Link
+            href="/quienes-somos"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-3 text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-white/40 hover:-translate-y-0.5"
+          >
+            Conoce más sobre nosotros
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </section>

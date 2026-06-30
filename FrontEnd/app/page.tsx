@@ -2,6 +2,7 @@ import { HeroSection } from '@/components/home/hero-section'
 import { WelcomeStrip } from '@/components/home/welcome-strip'
 import { FeaturedEvent } from '@/components/home/featured-event'
 import { RandomStores } from '@/components/home/random-stores'
+import { InstagramFeed } from '@/components/home/instagram-feed'
 import { InfoSection } from '@/components/home/info-section'
 import {
   fetchPerfilActivoServer,
@@ -24,6 +25,7 @@ export default async function HomePage() {
       <WelcomeStrip />
       <FeaturedEvent eventoDestacado={eventoDestacado} />
       <RandomStores locales={locales} />
+      <InstagramFeed />
       <InfoSection />
     </main>
   )

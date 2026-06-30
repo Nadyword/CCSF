@@ -59,6 +59,7 @@ export function InfoSection() {
               </p>
               
               <div className="mt-10 space-y-6">
+                <a target="_blank" href='https://www.google.com/maps/place/Centro+Comercial+Santa+Fe/@10.4661194,-66.8718689,18z/data=!4m15!1m8!3m7!1s0x8c2a589024c40f0d:0x5b8af5f0d1137df0!2sAvenida+Jose+Maria+Vargas,+Caracas+1080,+Miranda,+Venezuela!3b1!8m2!3d10.4638379!4d-66.8686878!16s%2Fg%2F1tp1zvzp!3m5!1s0x8c2a58910fea6327:0xdedec062827e1cd0!8m2!3d10.4662615!4d-66.8715848!16s%2Fg%2F11b7g0rx69?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D'>
                 <div className="group flex items-start gap-5 p-4 rounded-2xl transition-all duration-300 hover:bg-white/10">
                   <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand-accent)] to-rose-600 shadow-xl shadow-[var(--brand-accent)]/40 transition-transform group-hover:scale-110">
                     <MapPin className="h-6 w-6 text-white" />
@@ -68,13 +69,14 @@ export function InfoSection() {
                     <p className="mt-1 text-base text-white/60">{infoCC.direccion}</p>
                   </div>
                 </div>
+                </a>
                 
                 <div className="group flex items-start gap-5 p-4 rounded-2xl transition-all duration-300 hover:bg-white/10">
                   <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--brand-gold)] to-amber-600 shadow-xl shadow-[var(--brand-gold)]/40 transition-transform group-hover:scale-110">
                     <Phone className="h-6 w-6 text-[var(--brand-secondary)]" />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-lg">Telefono</p>
+                    <p className="font-bold text-white text-lg">Locales Disponibles</p>
                     <p className="mt-1 text-base text-white/60">{infoCC.telefono}</p>
                   </div>
                 </div>
