@@ -23,6 +23,19 @@ export async function loginApi(username: string, password: string): Promise<Logi
   return res.json() as Promise<LoginResponse>
 }
 
+/** Cambia la contraseña del usuario autenticado. Lanza un Error con el mensaje del backend si falla. */
+export async function changePasswordApi(passwordActual: string, passwordNueva: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/auth/change-password`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+    body: JSON.stringify({ passwordActual, passwordNueva }),
+  })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({})) as { mensaje?: string }
+    throw new Error(data.mensaje ?? `Error al cambiar la contraseña: ${res.status}`)
+  }
+}
+
 function getAuthHeaders(): Record<string, string> {
   if (typeof window === 'undefined') return {}
   const token = sessionStorage.getItem(TOKEN_KEY)

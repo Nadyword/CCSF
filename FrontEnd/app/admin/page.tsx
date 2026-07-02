@@ -10,7 +10,8 @@ import { EventosManager } from '@/components/admin/eventos-manager'
 import { LocalesManager } from '@/components/admin/locales-manager'
 import { HomeConfigManager } from '@/components/admin/home-config-manager'
 import { SlidesManager } from '@/components/admin/slides-manager'
-import { Calendar, Store, Settings, LayoutDashboard, Images } from 'lucide-react'
+import { ChangePasswordForm } from '@/components/admin/change-password-form'
+import { Calendar, Store, Settings, LayoutDashboard, Images, KeyRound } from 'lucide-react'
 
 export default function AdminPage() {
   const { isAuthenticated, isLoading, usuario } = useAuth()
@@ -116,7 +117,7 @@ export default function AdminPage() {
 
         {/* Management Tabs */}
         <Tabs defaultValue="carrusel" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="carrusel" className="gap-2">
               <Images className="h-4 w-4" />
               <span className="hidden sm:inline">Carrusel</span>
@@ -135,6 +136,11 @@ export default function AdminPage() {
               <Store className="h-4 w-4" />
               <span className="hidden sm:inline">Gestión de Locales</span>
               <span className="sm:hidden">Locales</span>
+            </TabsTrigger>
+            <TabsTrigger value="cuenta" className="gap-2">
+              <KeyRound className="h-4 w-4" />
+              <span className="hidden sm:inline">Mi Cuenta</span>
+              <span className="sm:hidden">Cuenta</span>
             </TabsTrigger>
           </TabsList>
 
@@ -190,6 +196,20 @@ export default function AdminPage() {
               </CardHeader>
               <CardContent>
                 <LocalesManager />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="cuenta">
+            <Card>
+              <CardHeader>
+                <CardTitle>Mi Cuenta</CardTitle>
+                <CardDescription>
+                  Cambia la contraseña de tu cuenta de acceso ({usuario?.username})
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChangePasswordForm />
               </CardContent>
             </Card>
           </TabsContent>

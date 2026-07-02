@@ -5,6 +5,7 @@ using BackEnd.DTOs;
 using BackEnd.Models;
 using BackEnd.Repositories;
 using BackEnd.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -28,6 +29,29 @@ public class AuthController(IUsuarioRepository usuarioRepo, IConfiguration confi
 
         var token = GenerateToken(usuario);
         return Ok(new LoginResponseDto(token, usuario.Username, usuario.Nombre, usuario.Rol));
+    }
+
+    /// <summary>PUT /api/auth/change-password — cambia la contraseña del usuario autenticado.</summary>
+    [Authorize]
+    [HttpPut("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.PasswordNueva) || dto.PasswordNueva.Length < 6)
+            return BadRequest(new { mensaje = "La nueva contraseña debe tener al menos 6 caracteres." });
+
+        var idClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (idClaim is null || !int.TryParse(idClaim, out var userId))
+            return Unauthorized();
+
+        var usuario = await usuarioRepo.GetByIdAsync(userId);
+        if (usuario is null)
+            return Unauthorized();
+
+        if (!PasswordService.Verify(dto.PasswordActual, usuario.PasswordHash))
+            return BadRequest(new { mensaje = "La contraseña actual es incorrecta." });
+
+        await usuarioRepo.UpdatePasswordAsync(usuario.Id, PasswordService.Hash(dto.PasswordNueva));
+        return NoContent();
     }
 
     private string GenerateToken(Usuario usuario)
