@@ -183,7 +183,7 @@ function ImagePickerLocal({ value, onChange }: { value: string | null; onChange:
 // ─── Formulario de Local ─────────────────────────────────────────────────────
 
 const EMPTY_FORM: UpsertLocalPayload = {
-  nombre: '', numeroLocal: '', nivel: 'Nivel 1',
+  nombre: '', numeroLocal: '', nivel: 'Nivel C1',
   descripcion: '', urlFoto: null, categoriaIds: [], horario: '', telefono: null,
 }
 
@@ -225,9 +225,12 @@ function LocalForm({
           <Select value={form.nivel} onValueChange={v => setForm({ ...form, nivel: v })}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="Nivel 1">Nivel 1</SelectItem>
-              <SelectItem value="Nivel 2">Nivel 2</SelectItem>
-              <SelectItem value="Nivel 3">Nivel 3</SelectItem>
+              <SelectItem value="Nivel C1">Nivel C1</SelectItem>
+              <SelectItem value="Nivel C2">Nivel C2</SelectItem>
+              <SelectItem value="Nivel C3">Nivel C3</SelectItem>
+              <SelectItem value="Nivel S1">Nivel S1</SelectItem>
+              <SelectItem value="Nivel S2">Nivel S2</SelectItem>
+              <SelectItem value="Nivel S3">Nivel S3</SelectItem>
             </SelectContent>
           </Select>
         </div>

@@ -350,7 +350,7 @@ export function EventosManager() {
 
               <div className="space-y-2">
                 <Label htmlFor="ubicacion">Ubicación</Label>
-                <Input id="ubicacion" placeholder="Ej: Plaza Central - Nivel 1" value={formData.ubicacion} onChange={e => set({ ubicacion: e.target.value })} required />
+                <Input id="ubicacion" placeholder="Ej: Plaza Central - Nivel C1" value={formData.ubicacion} onChange={e => set({ ubicacion: e.target.value })} required />
               </div>
 
               {saveError && (
